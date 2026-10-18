@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>سند معماری و نقشه راه - نرم‌افزار مدیریت تولید و پخش کارگاه تولیدی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+@page {
+    size: 720px 1020px;
+    margin: 0;
+}
+:root {
+    --c-bg: #fafbfc;
+    --c-card: #ffffff;
+    --c-text: #1a2744;
+    --c-text-muted: #4a5568;
+    --c-primary: #1a365d;
+    --c-primary-d: #0f2742;
+    --c-primary-l: #2d5a87;
+    --c-accent: #2c5282;
+    --c-accent-l: #4a90e2;
+    --c-border: #e2e8f0;
+    --c-stripe: #f7fafc;
+    --c-code-bg: #1e293b;
+    --c-code-text: #e2e8f0;
+    --c-success: #2f855a;
+    --c-warning: #c05621;
+    --c-danger: #c53030;
+    --c-info: #2b6cb0;
+    --c-primary-bg: #ebf4ff;
+    --c-accent-bg: #f0f7ff;
+}
+* { box-sizing: border-box; }
+html, body {
+    margin: 0; padding: 0;
+    width: 720px;
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    direction: rtl;
+}
+@media screen {
+    html { height: auto; display: flex; justify-content: center; background: #2d3748; }
+    body { margin: 20px auto; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+}
+.titlepage {
+    width: 720px; height: 1020px;
+    background: linear-gradient(160deg, var(--c-primary-d) 0%, var(--c-primary) 60%, var(--c-primary-l) 100%);
+    color: #ffffff; box-sizing: border-box;
+    break-after: page; overflow: hidden;
+    position: relative; padding: 70px 60px;
+    display: flex; flex-direction: column; justify-content: center;
+}
+.titlepage-glow-1 {
+    position: absolute;
+    top: 0; left: 0;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle at top left, rgba(74,144,226,0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.titlepage-glow-2 {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle at bottom right, rgba(44,82,130,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.titlepage-badge {
+    position: relative; display: inline-block;
+    padding: 8px 22px; background: rgba(255,255,255,0.15);
+    border-radius: 4px; font-size: 12px; font-weight: 500;
+    letter-spacing: 1px; margin-bottom: 40px; width: fit-content;
+}
+.titlepage-title {
+    position: relative; font-size: 44px; font-weight: 900;
+    line-height: 1.25; margin-bottom: 24px; letter-spacing: -0.5px;
+}
+.titlepage-subtitle {
+    position: relative; font-size: 20px; font-weight: 400;
+    line-height: 1.6; color: rgba(255,255,255,0.85);
+    margin-bottom: 60px; max-width: 580px;
+}
+.titlepage-divider {
+    position: relative; width: 80px; height: 4px;
+    background: var(--c-accent-l); margin-bottom: 40px;
+}
+.titlepage-tags {
+    position: relative; display: flex; flex-wrap: wrap;
+    gap: 8px; margin-bottom: 50px;
+}
+.titlepage-tag {
+    padding: 8px 14px; background: rgba(255,255,255,0.12);
+    border-radius: 3px; font-size: 11px; font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.9);
+}
+.titlepage-footer {
+    position: absolute; bottom: 60px; left: 60px; right: 60px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    color: rgba(255,255,255,0.7); font-size: 12px;
+}
+.titlepage-footer-block { display: flex; flex-direction: column; gap: 4px; }
+.titlepage-footer-label {
+    font-size: 10px; text-transform: uppercase;
+    letter-spacing: 1.5px; opacity: 0.7;
+    font-family: 'JetBrains Mono', monospace;
+}
+.titlepage-footer-value { font-size: 14px; font-weight: 500; color: #ffffff; }
+.main-content { padding: 50px 55px 40px 55px; }
+.chapter-header { break-after: avoid; break-inside: avoid; margin-top: 28px; margin-bottom: 18px; }
+.chapter-header:first-child { margin-top: 0; }
+.section-tag {
+    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 600; color: var(--c-accent);
+    letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase;
+}
+.section-title {
+    font-size: 26px; font-weight: 800; color: var(--c-primary-d);
+    line-height: 1.3; margin: 0 0 12px 0;
+}
+.section-subtitle {
+    font-size: 15px; font-weight: 400; color: var(--c-text-muted);
+    margin: 0 0 16px 0; line-height: 1.6;
+}
+.divider { width: 60px; height: 6px; background: var(--c-accent); margin-bottom: 20px; border-radius: 3px; }
+h2.subsection-title {
+    font-size: 18px; font-weight: 700; color: var(--c-primary);
+    margin: 22px 0 10px 0; line-height: 1.4; break-after: avoid;
+}
+h3.mini-title {
+    font-size: 15px; font-weight: 700; color: var(--c-primary-d);
+    margin: 16px 0 8px 0; line-height: 1.4; break-after: avoid;
+}
+p, .body-text {
+    margin: 0 0 12px 0; font-size: 14px; line-height: 1.85;
+    color: var(--c-text); text-align: justify;
+    line-break: strict; overflow-wrap: break-word;
+}
+ul, ol { margin: 8px 0 14px 0; padding-right: 22px; padding-left: 0; }
+li { margin-bottom: 6px; line-height: 1.75; font-size: 14px; color: var(--c-text); break-inside: avoid; }
+strong, b { font-weight: 700; color: var(--c-primary-d); }
+em { font-style: normal; color: var(--c-accent); font-weight: 600; }
+.code-block {
+    background: var(--c-code-bg); color: var(--c-code-text);
+    padding: 16px 18px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; line-height: 1.65; direction: ltr;
+    text-align: left; overflow-x: auto;
+    margin: 12px 0 16px 0; break-inside: avoid; white-space: pre-wrap;
+}
+.code-inline {
+    background: var(--c-primary-bg); color: var(--c-primary-d);
+    padding: 2px 6px; border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; direction: ltr; display: inline-block;
+}
+.callout {
+    background: var(--c-accent-bg); border-right: 4px solid var(--c-accent);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 12px 0; break-inside: avoid;
+}
+.callout-title { font-weight: 700; color: var(--c-accent); margin-bottom: 6px; font-size: 13px; }
+.callout-body { font-size: 13px; line-height: 1.7; color: var(--c-text); margin: 0; }
+.callout-warning { background: #fffaf0; border-right-color: var(--c-warning); }
+.callout-warning .callout-title { color: var(--c-warning); }
+.callout-success { background: #f0fff4; border-right-color: var(--c-success); }
+.callout-success .callout-title { color: var(--c-success); }
+.callout-danger { background: #fff5f5; border-right-color: var(--c-danger); }
+.callout-danger .callout-title { color: var(--c-danger); }
+table {
+    width: 100%; border-collapse: collapse;
+    margin: 12px 0 18px 0; font-size: 12px;
+    background: var(--c-card); border: 1px solid var(--c-border);
+    break-inside: avoid;
+}
+table.long-table { break-inside: auto; }
+table.long-table tr { break-inside: avoid; }
+thead { display: table-header-group; }
+thead th {
+    background: var(--c-primary-d); color: #ffffff;
+    font-weight: 600; padding: 10px 12px;
+    text-align: right; font-size: 12px;
+    border-bottom: 2px solid var(--c-primary);
+}
+tbody td {
+    padding: 8px 12px; border-bottom: 1px solid var(--c-border);
+    color: var(--c-text); vertical-align: top;
+    text-align: right; line-height: 1.55;
+    overflow-wrap: break-word; word-break: break-word;
+}
+tbody tr:nth-child(even) { background: var(--c-stripe); }
+tbody tr:last-child td { border-bottom: none; }
+.table-caption {
+    font-size: 11px; color: var(--c-text-muted);
+    margin-top: -10px; margin-bottom: 18px;
+    font-style: italic; text-align: right;
+}
+.stat-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin: 14px 0 18px 0;
+}
+.stat-card {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-right: 3px solid var(--c-accent);
+    padding: 14px 16px; border-radius: 4px; break-inside: avoid;
+}
+.stat-value {
+    font-size: 24px; font-weight: 900; color: var(--c-primary-d);
+    line-height: 1.1; margin-bottom: 4px;
+}
+.stat-label { font-size: 11px; color: var(--c-text-muted); font-weight: 500; }
+.diagram-container {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: 6px; padding: 20px;
+    margin: 14px 0 18px 0; break-inside: avoid;
+}
+.diagram-title {
+    font-size: 13px; font-weight: 700; color: var(--c-primary-d);
+    margin-bottom: 12px; text-align: center;
+}
+.diagram-caption {
+    font-size: 11px; color: var(--c-text-muted);
+    margin-top: 10px; text-align: center; font-style: italic;
+}
+.arch-layer {
+    background: var(--c-stripe); border: 1px solid var(--c-border);
+    border-radius: 4px; padding: 10px 14px; margin-bottom: 8px;
+}
+.arch-layer-title {
+    font-size: 11px; font-weight: 700; color: var(--c-accent);
+    margin-bottom: 8px; text-transform: uppercase;
+    letter-spacing: 1px; font-family: 'JetBrains Mono', monospace;
+}
+.arch-boxes { display: flex; flex-wrap: wrap; gap: 6px; }
+.arch-box {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    padding: 6px 10px; border-radius: 3px;
+    font-size: 11px; color: var(--c-text); font-weight: 500;
+}
+.arch-box.primary {
+    background: var(--c-primary-bg); border-color: var(--c-accent);
+    color: var(--c-primary-d);
+}
+.erd-group {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin: 8px 0;
+}
+.erd-entity {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-right: 3px solid var(--c-accent);
+    padding: 6px 10px; font-size: 11px;
+    border-radius: 3px; color: var(--c-text);
+}
+.erd-entity-strong {
+    background: var(--c-primary-bg); border-color: var(--c-accent);
+    color: var(--c-primary-d); font-weight: 600;
+}
+.gantt {
+    width: 100%; border-collapse: collapse;
+    font-size: 11px; margin: 10px 0;
+}
+.gantt th, .gantt td {
+    border: 1px solid var(--c-border); padding: 6px 4px; text-align: center;
+}
+.gantt th {
+    background: var(--c-primary-d); color: #fff;
+    font-weight: 600; font-size: 10px;
+}
+.gantt .phase-name {
+    text-align: right; background: var(--c-stripe);
+    font-weight: 600; padding-right: 10px; color: var(--c-primary-d);
+}
+.gantt .bar-1 { background: #5a8ab8; }
+.gantt .bar-2 { background: #4a7ac7; }
+.gantt .bar-3 { background: #3b82c4; }
+.gantt .bar-4 { background: #2c5282; }
+.gantt .bar-5 { background: #1e3a5f; }
+.gantt .bar-6 { background: #0f2742; }
+.risk-high { background: #fff5f5; color: var(--c-danger); border: 1px solid #fed7d7; }
+.risk-medium { background: #fffaf0; color: var(--c-warning); border: 1px solid #fde2c4; }
+.risk-low { background: #f0fff4; color: var(--c-success); border: 1px solid #c6f6d5; }
+.risk-badge {
+    padding: 3px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 700; display: inline-block;
+}
+.ending {
+    width: 720px; height: 1020px;
+    background: var(--c-primary-d); color: #ffffff;
+    box-sizing: border-box; break-before: page; overflow: hidden;
+    position: relative; padding: 80px 60px;
+    display: flex; flex-direction: column; justify-content: center;
+}
+.ending::before {
+    content: ''; position: absolute;
+    top: 0; right: 0; width: 300px; height: 300px;
+    background: radial-gradient(circle at top right, rgba(74,144,226,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.ending-title { font-size: 36px; font-weight: 800; margin-bottom: 20px; position: relative; }
+.ending-text {
+    font-size: 16px; line-height: 1.8;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 30px; position: relative; max-width: 560px;
+}
+.ending-divider {
+    width: 80px; height: 4px; background: var(--c-accent-l);
+    margin-bottom: 40px; position: relative;
+}
+.ending-blocks {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; position: relative;
+}
+.ending-block {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 18px 20px; border-radius: 6px;
+}
+.ending-block-title {
+    font-size: 12px; font-weight: 700; color: var(--c-accent-l);
+    margin-bottom: 8px; text-transform: uppercase;
+    letter-spacing: 1.5px; font-family: 'JetBrains Mono', monospace;
+}
+.ending-block-list {
+    font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.7;
+}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="titlepage">
+    <div class="titlepage-glow-1"></div>
+    <div class="titlepage-glow-2"></div>
+    <div class="titlepage-badge">سند فنی / نسخه ۱.۰</div>
+    <div class="titlepage-title">نرم‌افزار جامع مدیریت تولید و پخش کارگاه‌های تولیدی</div>
+    <div class="titlepage-subtitle">سند معماری فنی، طراحی پایگاه داده (ERD) و نقشه راه اجرایی برای جایگزینی سیستم شکننده فعلی با یک پلتفرم پایدار، چندکاربره و تحت وب.</div>
+    <div class="titlepage-divider"></div>
+    <div class="titlepage-tags">
+        <span class="titlepage-tag">Django 4.2</span>
+        <span class="titlepage-tag">PostgreSQL 16</span>
+        <span class="titlepage-tag">Next.js 14</span>
+        <span class="titlepage-tag">RTL / Vazirmatn</span>
+        <span class="titlepage-tag">FEFO / Weighted Avg</span>
+        <span class="titlepage-tag">Multi-tenant</span>
+    </div>
+    <div class="titlepage-footer">
+        <div class="titlepage-footer-block">
+            <span class="titlepage-footer-label">PREPARED BY</span>
+            <span class="titlepage-footer-value">تیم ارشد مهندسی نرم‌افزار</span>
+        </div>
+        <div class="titlepage-footer-block">
+            <span class="titlepage-footer-label">DATE</span>
+            <span class="titlepage-footer-value">۱۴۰۴ / ۲۰۲۵</span>
+        </div>
+        <div class="titlepage-footer-block">
+            <span class="titlepage-footer-label">CLASSIFICATION</span>
+            <span class="titlepage-footer-value">سند معماری</span>
+        </div>
+    </div>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main-content">
+
+<!-- ============ EXECUTIVE SUMMARY ============ -->
+<div class="chapter-header">
+    <div class="section-tag">EXECUTIVE SUMMARY</div>
+    <div class="section-title">خلاصه اجرایی</div>
+    <div class="divider"></div>
+</div>
+
+<p>این سند معماری برای طراحی و پیاده‌سازی یک <strong>نرم‌افزار جامع مدیریت تولید و پخش</strong> برای یک کارگاه تولیدی متوسط‌بزرگ تهیه شده است. هدف اصلی پروژه جایگزینی یک فایل نرم‌افزاری شکننده فعلی با یک سیستم پایدار، چندکاربره و تحت وب است. نسخه ۲.۰ این سند با اضافه شدن دو رابط موبایل (اپ Native برای عوامل پخش و پورتال PWA برای فروشگاه‌ها) و ۸ قابلیت تکمیلی، پلتفرم را از یک سیستم داخلی به یک بازار تجاری B2B تبدیل می‌کند.</p>
+
+<p>کسب‌وکار با تولید بیش از ۳۰ نوع محصول با تاریخ انقضای کوتاه (حدود ۱۵ روز)، پخش به ۲۰۰ فروشگاه فیزیکی و چند پلتفرم آنلاین از طریق ۳ عامل پخش، و مدل فروش ترکیبی (امانی و قطعی) کار می‌کند. این پیچیدگی نیازمند ردیابی دقیق بچ (Batch) و لات (Lot) بر اساس روش FEFO (First-Expired-First-Out) و محاسبه بهای تمام‌شده به روش میانگین موزون است.</p>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-value">۴۹</div>
+        <div class="stat-label">جدول پایگاه داده</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">۱۰ ماه</div>
+        <div class="stat-label">مدت توسعه</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">۸</div>
+        <div class="stat-label">فاز اجرایی</div>
+    </div>
+</div>
+
+<p>از نظر فنی، سیستم با <strong>Django 4.2 + Django REST Framework</strong> در بک‌اند، <strong>PostgreSQL 16</strong> به‌عنوان پایگاه داده مرکزی، و <strong>Next.js 14 + TypeScript + Tailwind RTL</strong> در فرانت‌اند وب پیاده‌سازی می‌شود. برای عوامل پخش، <strong>اپ React Native</strong> با بارکدخوان نیتیو و حالت آفلاین پیشرفته ارائه می‌شود. برای فروشگاه‌ها، یک <strong>پورتال PWA</strong> با قابلیت سفارش آنلاین، پرداخت از طریق درگاه‌های زرین‌پال/آیدی‌پی/پارسیان و گزارش‌گیری خودکار طراحی شده. Redis برای کش و صف Celery برای کارهای پس‌زمینه (ارسال پیامک، Push Notification، گزارش‌گیری، هشدار انقضا) استفاده خواهد شد. تمام ۴۹ جدول کسب‌وکار در یک پایگاه داده مرکزی با پشتیبانی کامل از ACID و تراکنش‌های دوطرفه طراحی شده‌اند.</p>
+
+<p>نقشه راه توسعه هشت‌فازی در ده ماه شامل: (۱) بن‌بست و مدل پایه، (۲) تولید و انبار، (۳) فروش و پخش، (۴) حسابداری و گزارش، (۵) موبایل عامل (React Native) با جریان تأیید، (۶) پورتال فروشگاه (PWA) با پرداخت آنلاین، (۷) بارکد/QR و Smart Reorder، (۸) تست، بهینه‌سازی و یکپارچگی‌های نهایی است. این فازبندی به تیم اجازه می‌دهد در هر مرحله یک MVP قابل دمو تحویل دهد و در عین حال ریسک‌های فنی را در همان مراحل اولیه شناسایی کند.</p>
+
+<div class="callout">
+    <div class="callout-title">قابلیت‌های جدید نسخه ۲.۰</div>
+    <p class="callout-body">این نسخه با اضافه شدن ۸ قابلیت تکمیلی، ارزش کسب‌وکار را به طور قابل توجهی افزایش می‌دهد: (۱) مدیریت اعتبار فروشگاه با سقف پویا، (۲) بارکد و QR Code برای هر محصول/لات/سفارش، (۳) یکپارچگی با سامانه مالیاتی سامان برای صورت‌حساب الکترونیکی، (۴) درگاه پرداخت آنلاین (زرین‌پال، آیدی‌پی، پارسیان)، (۵) سیستم Smart Reorder بر اساس نرخ فروش، (۶) برنامه وفاداری فروشگاه‌ها با امتیاز پویا، (۷) گزارش جغرافیایی Heatmap، و (۸) Push Notification با Firebase Cloud Messaging.</p>
+</div>
+
+<!-- ============ SECTION 1: Business Analysis ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 01</div>
+    <div class="section-title">معرفی و تحلیل کسب‌وکار</div>
+    <div class="section-subtitle">درک دامنه، چالش‌ها و الزامات فنی پروژه</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱.۱ زمینه و چالش فعلی</h2>
+<p>کارگاه تولیدی در حال حاضر از یک فایل نرم‌افزاری شکننده (احتمالاً یک فایل اکسل پیچیده با ماکرو یا یک برنامه دسکتاپ تک‌کاربره قدیمی) برای مدیریت عملیات روزانه استفاده می‌کند. این سیستم با رشد کسب‌وکار در طول چند سال گذشته به طور جدی تضعیف شده است: پشتیبانی همزمان چند کاربر را ندارد، گزارش‌گیری بلادرنگ را پشتیبانی نمی‌کند، در محاسبه بهای تمام‌شده دچار خطاهای دستی می‌شود، و هیچ کنترلی برای ردیابی دقیق لات و تاریخ انقضا ارائه نمی‌دهد.</p>
+
+<p>این محدودیت‌ها به طور مستقیم بر تصمیم‌گیری‌های مدیریتی و عملکرد مالی کسب‌وکار تأثیر می‌گذارند. عدم ردیابی دقیق FEFO باعث افزایش ضایعات و کالاهای منقضی می‌شود، نبود یکپارچگی بین انبار و حسابداری خطاهای ثبت را افزایش می‌دهد، و عدم دسترسی موبایلی برای عوامل پخش، فرایند سرکشی را کند و خطاپذیر می‌سازد. این محدودیت‌ها به طور روزافزون با رشد کسب‌وکار تشدید می‌شوند و در نهایت به یک گلوگاه عملیاتی تبدیل خواهند شد.</p>
+
+<h2 class="subsection-title">۱.۲ مشخصات کسب‌وکار</h2>
+<p>کسب‌وکار در یک محیط عملیاتی با مشخصات زیر فعالیت می‌کند که هر کدام الزامات طراحی خاص خود را بر معماری سیستم تحمیل می‌کنند:</p>
+
+<ul>
+    <li><strong>تنوع محصول:</strong> بیش از ۳۰ نوع محصول با دسته‌بندی‌های مختلف (گروه A، گروه B، گروه C، ویژه مناسبتی). هر محصول دارای دستور تولید خاص، قیمت تمام‌شده و چرخه انقضای مستقل است. تنوع بالا نیاز به یک سیستم پویا برای تعریف محصول با ویژگی‌های سفارشی دارد.</li>
+    <li><strong>تاریخ انقضای کوتاه:</strong> هر محصول بین ۱۲ تا ۱۵ روز ماندگاری دارد که مدیریت FEFO را به یک الزام حیاتی تبدیل می‌کند. هر روز تأخیر در تصمیم‌گیری انتقال یا فروش، یک روز از چرخه فروش مفید را کم می‌کند و احتمال ضایعات را افزایش می‌دهد.</li>
+    <li><strong>شبکه توزیع گسترده:</strong> ۲۰۰ فروشگاه فیزیکی فعال در چند استان و چند پلتفرم آنلاین (اینستاگرام، سایت اختصاصی، اسنپ‌فود) که از طریق ۳ عامل پخش مستقل با مسیرهای متفاوت سرو می‌شوند. هر عامل روزانه ۳۰ تا ۵۰ فروشگاه را سرکشی می‌کند.</li>
+    <li><strong>مدل فروش ترکیبی:</strong> بخشی از فروش امانی (Consignment) است که در آن کالا تا فروش نهایی به فروشگاه منتقل نشده و مالکیت در دست کارگاه می‌ماند، و بخشی قطعی (Firm Sale) است که در آن فروش مستقیم به فروشگاه انجام می‌شود. این دو مدل نیاز به منطق متفاوت در انبار و حسابداری دارند.</li>
+    <li><strong>الزام حسابداری:</strong> نیاز به محاسبه دقیق بهای تمام‌شده با روش میانگین موزون، ردیابی بچ/لات، و یکپارچگی کامل با حسابداری دوطرفه برای تحلیل سود و زیان دقیق در هر سطح محصول، فروشگاه و عامل.</li>
+</ul>
+
+<h2 class="subsection-title">۱.۳ اهداف فنی</h2>
+<p>نرم‌افزار جدید باید اهداف فنی زیر را محقق سازد تا الزامات کسب‌وکار را برآورده کند و در عین حال یک پلتفرم پایدار و قابل توسعه برای سال‌های آینده باشد. این اهداف شاخص‌های قابل اندازه‌گیری دارند که در طول پروژه رصد خواهند شد:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 22%;">هدف فنی</th>
+    <th style="width: 38%;">شرح</th>
+    <th style="width: 40%;">معیار موفقیت</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><strong>چندکاربره</strong></td>
+    <td>پشتیبانی همزمان ۵۰+ کاربر با نقش‌های متفاوت (مدیر، حسابدار، انباردار، عامل) بدون قفل‌گذاری رکورد.</td>
+    <td>Response time &lt; 300ms در P95، Uptime ≥ ۹۹.۵٪</td>
+</tr>
+<tr>
+    <td><strong>تحت وب</strong></td>
+    <td>دسترسی از هر مرورگری بدون نیاز به نصب، پشتیبانی کامل از مرورگرهای موبایل و دسکتاپ.</td>
+    <td>Lighthouse Score &gt; ۹۰ در Performance, Accessibility</td>
+</tr>
+<tr>
+    <td><strong>راست‌چین و شمسی</strong></td>
+    <td>تمام رابط‌ها به فارسی RTL با تقویم جلالی، اعداد فارسی و قالب‌بندی صحیح تاریخ/زمان.</td>
+    <td>۱۰۰٪ صفحات با dir="rtl"، تقویم شمسی در همه Date Picker‌ها</td>
+</tr>
+<tr>
+    <td><strong>یکپارچگی انبار-حسابداری</strong></td>
+    <td>ثبت خودکار اسناد حسابداری به محض ثبت هر سند انبار (فروش، خرید، انتقال، برگشت) با کنترل توازن.</td>
+    <td>۰ خطای توازن بدهکار/بستانکار در پایان روز</td>
+</tr>
+<tr>
+    <td><strong>پایداری و توسعه‌پذیری</strong></td>
+    <td>معماری ماژولار با جداسازی وابستگی‌ها، تست‌پذیری بالا، مستندسازی API.</td>
+    <td>Code Coverage &gt; ۸۰٪، Pylint Score &gt; ۸</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۱.۴ فرضیات و محدودیت‌ها</h2>
+<p>این سند با در نظر گرفتن فرضیات زیر تنظیم شده است. هرگونه تغییر در این فرضیات نیازمند بازنگری در معماری و نقشه راه است و باید در فاز صفر پروژه به‌صورت رسمی تأیید شود:</p>
+
+<ul>
+    <li>تیم توسعه شامل ۱ معمار/توسعه‌دهنده ارشد بک‌اند، ۲ توسعه‌دهنده Mid-level، ۱ توسعه‌دهنده فرانت‌اند و ۱ QA Tester است که به‌صورت تمام‌وقت روی پروژه کار می‌کنند.</li>
+    <li>زیرساخت میزبانی روی یک VPS اختصاصی یا کلاد (هلست‌ایران یا تهران‌سرور) با حداقل ۱۶GB RAM و ۴ هسته CPU انجام می‌شود، با امکان ارتقاء به ۳۲GB RAM در فاز تولید.</li>
+    <li>هیچ انتقال داده‌ای از سیستم قدیمی به‌صورت خودکار انجام نمی‌شود؛ تمام داده‌های اولیه (محصولات، مشتریان، موجودی افتتاحیه) به‌صورت دستی وارد می‌شوند. دلیل: ناپایداری سیستم قدیمی و عدم وجود ساختار استاندارد داده.</li>
+    <li>سرویس پیامک از طریق پروایدرهای ایرانی (کاوه‌نگار یا فراپیامک) تأمین می‌شود با Reserve Provider دوم برای اطمینان از پایداری.</li>
+    <li>پروژه به‌صورت داخلی (On-Premise یا VPS داخل ایران) میزبانی می‌شود تا با مقررات داده‌های ایران سازگار باشد و دسترسی سریع برای کاربران داخلی فراهم شود.</li>
+    <li>زبان پیش‌فرض سیستم فارسی است؛ انگلیسی فقط در گزارش‌های فنی، لاگ‌ها و مستندات API استفاده می‌شود.</li>
+</ul>
+
+<!-- ============ SECTION 2: Architecture ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 02</div>
+    <div class="section-title">معماری فنی (C4 Model)</div>
+    <div class="section-subtitle">لایه‌بندی سیستم، انتخاب فناوری و نمودار C4 Level 1 و 2</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۲.۱ نمای کلی معماری</h2>
+<p>معماری پیشنهادی یک مدل <strong>Layered Monolith</strong> است که ترکیبی از سادگی استقرار یک Monoolith و نظم یک معماری لایه‌ای تمیز است. این انتخاب بر اساس سه معیار کلیدی انجام شده: (۱) اندازه تیم کوچک (۴-۵ نفر)، (۲) نیاز به تحویل سریع MVP در ۸ ماه، و (۳) نیاز به پایداری بالا بدون پیچیدگی‌های توزیعی Microservice. در صورت رشد آتی کسب‌وکار، تمایل ماژولار Django اجازه استخراج سرویس‌ها را در آینده فراهم می‌کند.</p>
+
+<p>سیستم از شش لایه اصلی تشکیل شده که هر کدام مسئولیت مشخصی دارند و از طریق رابط‌های قراردادی (API contracts) با هم ارتباط برقرار می‌کنند. این جداسازی باعث می‌شود تغییر در یک لایه (مثلاً تعویض پروایدر پیامک) نیازی به تغییر در لایه‌های دیگر نداشته باشد. تمام ارتباطات بین لایه‌های داخلی از طریق Dependency Injection و رابط‌های (Interfaces) انجام می‌شود که تست‌پذیری و انعطاف‌پذیری را بالا می‌برد.</p>
+
+<div class="diagram-container">
+    <div class="diagram-title">نمودار معماری C4 — Level 1 (Container View)</div>
+    <div class="arch-layer">
+        <div class="arch-layer-title">[L1] PRESENTATION LAYER</div>
+        <div class="arch-boxes">
+            <div class="arch-box primary">Next.js 14 (Admin Web)</div>
+            <div class="arch-box primary">React Native (عوامل پخش)</div>
+            <div class="arch-box primary">PWA (فروشگاه‌ها)</div>
+            <div class="arch-box">Tailwind CSS RTL</div>
+            <div class="arch-box">Vazirmatn Font</div>
+            <div class="arch-box">Jalaali-js Calendar</div>
+            <div class="arch-box">Barcode Scanner (Native)</div>
+            <div class="arch-box">Firebase Push</div>
+        </div>
+    </div>
+    <div class="arch-layer">
+        <div class="arch-layer-title">[L2] API GATEWAY LAYER</div>
+        <div class="arch-boxes">
+            <div class="arch-box primary">Django 4.2 + DRF</div>
+            <div class="arch-box">JWT Auth</div>
+            <div class="arch-box">RBAC Middleware</div>
+            <div class="arch-box">Rate Limiting</div>
+            <div class="arch-box">DRF Spectacular (OpenAPI)</div>
+        </div>
+    </div>
+    <div class="arch-layer">
+        <div class="arch-layer-title">[L3] SERVICE / DOMAIN LAYER</div>
+        <div class="arch-boxes">
+            <div class="arch-box primary">Inventory Service</div>
+            <div class="arch-box primary">Production Service</div>
+            <div class="arch-box primary">Sales &amp; Dispatch Service</div>
+            <div class="arch-box primary">Approval Workflow Service</div>
+            <div class="arch-box primary">Store Portal Service</div>
+            <div class="arch-box primary">Payments Service</div>
+            <div class="arch-box primary">Accounting Service</div>
+            <div class="arch-box primary">Notification Service (SMS+Push)</div>
+            <div class="arch-box primary">Loyalty &amp; Smart Reorder</div>
+            <div class="arch-box">Reporting &amp; Geo Service</div>
+        </div>
+    </div>
+    <div class="arch-layer">
+        <div class="arch-layer-title">[L4] DATA LAYER</div>
+        <div class="arch-boxes">
+            <div class="arch-box primary">PostgreSQL 16 (49 Tables)</div>
+            <div class="arch-box">Redis (Cache &amp; Sessions)</div>
+            <div class="arch-box">MinIO / S3 (Files &amp; Images)</div>
+            <div class="arch-box">Firebase Firestore (Mobile Sync)</div>
+        </div>
+    </div>
+    <div class="arch-layer">
+        <div class="arch-layer-title">[L5] ASYNC LAYER</div>
+        <div class="arch-boxes">
+            <div class="arch-box primary">Celery Workers</div>
+            <div class="arch-box">Celery Beat (Scheduled)</div>
+            <div class="arch-box">RabbitMQ Broker</div>
+        </div>
+    </div>
+    <div class="arch-layer">
+        <div class="arch-layer-title">[L6] EXTERNAL INTEGRATIONS</div>
+        <div class="arch-boxes">
+            <div class="arch-box">Kavenegar SMS API</div>
+            <div class="arch-box">Farapayamak (Backup)</div>
+            <div class="arch-box">Zarinpal Payment</div>
+            <div class="arch-box">IDPay Payment</div>
+            <div class="arch-box">Parsian Bank Gateway</div>
+            <div class="arch-box">Saman Tax (e-Invoice)</div>
+            <div class="arch-box">Firebase Cloud Messaging</div>
+            <div class="arch-box">Google Maps API</div>
+        </div>
+    </div>
+    <div class="diagram-caption">شکل ۱: لایه‌بندی سیستم از کلاینت تا یکپارچگی‌های خارجی</div>
+</div>
+
+<h2 class="subsection-title">۲.۲ انتخاب فناوری و обосновان</h2>
+<p>انتخاب فناوری برای هر لایه بر اساس سه معیار انجام شده: (۱) بلوغ و پایداری اکوسیستم، (۲) در دسترس بودن منابع انسانی در بازار ایران، و (۳) سازگاری با الزامات خاص پروژه (RTL، شمسی، FEFO، حسابداری دوطرفه). جدول زیر обосновان انتخاب‌ها را به‌طور شفاف شرح می‌دهد:</p>
+
+<table class="long-table">
+<thead>
+<tr>
+    <th style="width: 18%;">لایه</th>
+    <th style="width: 25%;">فناوری انتخابی</th>
+    <th style="width: 57%;">دلیل انتخاب</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>بک‌اند</td>
+    <td>Django 4.2 + DRF</td>
+    <td>ORM قدرتمند، Admin آماده، امنیت داخلی، اکوسیستم پایتون برای حسابداری و محاسبات عددی با کتابخانه‌هایی مثل NumPy و Pandas، سازگاری با Celery.</td>
+</tr>
+<tr>
+    <td>پایگاه داده</td>
+    <td>PostgreSQL 16</td>
+    <td>پشتیبانی ACID کامل، JSONB برای فرم‌های پویا، عملکرد بالا روی Volume داده متوسط (۲۰۰ فروشگاه × ۳۰ محصول × ۳۶۵ روز ≈ ۲.۲M رکورد در سال)، Trigger Functions برای کنترل توازن حسابداری، Open-source و بدون لایسنس.</td>
+</tr>
+<tr>
+    <td>فرانت‌اند</td>
+    <td>Next.js 14 + TypeScript</td>
+    <td>SSR برای SEO و عملکرد اولیه، TypeScript برای امنیت نوع در منطق پیچیده، اکوسیستم Tailwind RTL قدرتمند، PWA برای دسترسی آفلاین عوامل.</td>
+</tr>
+<tr>
+    <td>کش و صف</td>
+    <td>Redis 7 + RabbitMQ 3</td>
+    <td>Redis برای کش کوئری‌های پرتکرار (موجودی لحظه‌ای، لیست محصولات) و Session، RabbitMQ به‌عنوان Broker پایدارتر برای Celery در حجم بالا.</td>
+</tr>
+<tr>
+    <td>Async Workers</td>
+    <td>Celery 5 + Beat</td>
+    <td>ارسال پیامک‌های زمان‌بندی‌شده، تولید گزارش‌های سنگین در پس‌زمینه، اجرای شبانه Job هشدار FEFO، مانیتورینگ توازن حسابداری روزانه.</td>
+</tr>
+<tr>
+    <td>تقویم و RTL</td>
+    <td>jalaali-js + Vazirmatn</td>
+    <td>jalaali-js استاندارد بازار ایران برای تبدیل میلادی-شمسی، Vazirmatn فونت فارسی مدرن با وزن‌های کامل (۳۰۰-۹۰۰) و پشتیبانی اعداد فارسی.</td>
+</tr>
+<tr>
+    <td>Deployment</td>
+    <td>Docker Compose + Nginx</td>
+    <td>Docker برای سادگی استقرار و rollback، Nginx به‌عنوان Reverse Proxy با SSL و Rate Limiting.</td>
+</tr>
+<tr>
+    <td>مانیتورینگ</td>
+    <td>Sentry + Grafana</td>
+    <td>Sentry برای خطاهای کد (Frontend و Backend)، Grafana + Prometheus برای Metrics زیرساختی.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۲.۳ جریان داده و تراکنش‌ها</h2>
+<p>در معماری پیشنهادی، تمام درخواست‌های کاربر از طریق Nginx وارد لایه API Django می‌شوند. لایه API پس از احراز هویت (JWT) و کنترل نقش (RBAC)، درخواست را به Service مربوطه ارجاع می‌دهد. Service‌ها منطق کسب‌وکار را در یک تراکنش پایگاه داده اجرا می‌کنند و در پایان، در صورت تغییر داده‌های انبار یا مالی، یک سیگنال Django (Signal) ارسال می‌کنند که توسط Accounting Service و Notification Service دریافت شده و اقدامات لازم (ثبت سند حسابداری، ارسال پیامک) را به‌صورت همزمان یا ناهمزمان انجام می‌دهد.</p>
+
+<p>این الگو (Signal-Driven) جداسازی واضحی بین لایه‌ها فراهم می‌آورد: هیچ Service‌ای مستقیماً جدول حسابداری را دستکاری نمی‌کند. در عین حال، تمام تراکنش‌های بحرانی (مثل ثبت فروش) از یک Database Transaction استفاده می‌کنند که در صورت بروز هر خطایی، تمام اثرات rollback می‌شوند. این تضمین می‌کند که هم انبار و هم حسابداری همواره همگام هستند.</p>
+
+<div class="callout callout-warning">
+    <div class="callout-title">نکته طراحی</div>
+    <p class="callout-body">استفاده از Django Signals برای یکپارچگی انبار-حسابداری سادگی توسعه را بالا می‌برد، اما در حجم بالا ممکن است به یک گلوگاه تبدیل شود. در فاز ۶ (تست و بهینه‌سازی) پیشنهاد می‌شود این ارتباط به Celery Task ناهمزمان منتقل شود تا تراکنش اصلی فروش سریع‌تر commit شود و سند حسابداری در پس‌زمینه تولید گردد.</p>
+</div>
+
+<!-- ============ SECTION 3: Django Apps ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 03</div>
+    <div class="section-title">طراحی ماژولار بک‌اند (Django Apps)</div>
+    <div class="section-subtitle">جداسازی Domain‌ها، الگوی Service-Repository و کنترل دسترسی RBAC</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۳.۱ ساختار Apps</h2>
+<p>بک‌اند Django به ۱۷ ماژول مستقل (App) تقسیم می‌شود که هر کدام یک Domain مشخص کسب‌وکار را پوشش می‌دهند. این ماژولار بودن دو فایده اصلی دارد: (۱) جداسازی واضح مسئولیت‌ها که تیم توسعه می‌تواند هم‌زمان روی چند ماژول کار کند، و (۲) امکان استخراج آینده به Microservice در صورت رشد شدید حجم. هر App دارای مدل‌های مختصر به خود، Service Layer برای منطق کسب‌وکار، و Repository Pattern برای دسترسی به داده است. شش App جدید نسبت به نسخه ۱.۰ برای پشتیبانی از موبایل عوامل، پورتال فروشگاه‌ها، پرداخت آنلاین و قابلیت‌های هوشمند اضافه شده‌اند.</p>
+
+<table class="long-table">
+<thead>
+<tr>
+    <th style="width: 14%;">App</th>
+    <th style="width: 22%;">نام فارسی</th>
+    <th style="width: 36%;">مسئولیت</th>
+    <th style="width: 28%;">مدل‌های اصلی</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><code>accounts</code></td>
+    <td>کاربران و نقش‌ها</td>
+    <td>احراز هویت JWT، مدیریت نقش‌ها (RBAC)، پروفایل کاربر، لاگ فعالیت.</td>
+    <td>User, Role, Permission, UserProfile, ActivityLog</td>
+</tr>
+<tr>
+    <td><code>products</code></td>
+    <td>محصولات و دسته‌بندی</td>
+    <td>تعریف محصول، دسته‌بندی، واحد، فرمول تولید، قیمت‌گذاری، آپلود تصاویر کاتالوگ، تولید بارکد.</td>
+    <td>Product, ProductCategory, Unit, BOM, Price, ProductImage, Barcode</td>
+</tr>
+<tr>
+    <td><code>inventory</code></td>
+    <td>انبار و موجودی</td>
+    <td>موجودی لات/بچ، حرکت‌های انبار، موجودی لحظه‌ای، FEFO Engine.</td>
+    <td>InventoryLot, InventoryMovement, StockBalance, Warehouse</td>
+</tr>
+<tr>
+    <td><code>production</code></td>
+    <td>تولید و مصرف</td>
+    <td>ثبت بچ تولید، مصرف مواد اولیه، خروج محصول نهایی، محاسبه راندمان.</td>
+    <td>ProductionBatch, ProductionConsumption, ProductionOutput</td>
+</tr>
+<tr>
+    <td><code>dispatch</code></td>
+    <td>پخش و بارگیری</td>
+    <td>سند پخش به عامل، بارگیری و انتقال بین انبار و فروشگاه، ردیابی مسیر عامل.</td>
+    <td>DispatchHeader, DispatchLine, Route, Vehicle</td>
+</tr>
+<tr>
+    <td><code>sales</code></td>
+    <td>فروش و برگشت</td>
+    <td>سند فروش امانی/قطعی، سند برگشت از فروشگاه، تسویه فروش امانی.</td>
+    <td>SalesHeader, SalesLine, ReturnHeader, ReturnLine</td>
+</tr>
+<tr>
+    <td><code>transfers</code></td>
+    <td>انتقال بین فروشگاه‌ها</td>
+    <td>انتقال کالا بین دو فروشگاه، پیشنهاد انتقال FEFO، تأیید دوطرفه.</td>
+    <td>TransferHeader, TransferLine, TransferSuggestion</td>
+</tr>
+<tr>
+    <td><code>partners</code></td>
+    <td>فروشگاه‌ها و عوامل</td>
+    <td>مدیریت ۲۰۰ فروشگاه، ۳ عامل پخش، مشتریان آنلاین، اعتبار و امتیاز وفاداری هر فروشگاه.</td>
+    <td>Store, Distributor, Customer, PartnerCredit, LoyaltyPoint</td>
+</tr>
+<tr>
+    <td><code>accounting</code></td>
+    <td>حسابداری دوطرفه</td>
+    <td>سند حسابداری، رشد حساب‌ها (کدینگ)، کنترل توازن بدهکار/بستانکار، تراز.</td>
+    <td>Account, JournalHeader, JournalLine, FiscalPeriod</td>
+</tr>
+<tr>
+    <td><code>notifications</code></td>
+    <td>اعلان و پیامک</td>
+    <td>صف پیامک، Push Notification (Firebase)، قالب پیام، تاریخچه ارسال، زمان‌بندی یادآوری سرکشی.</td>
+    <td>SmsTemplate, SmsQueue, SmsLog, PushNotification, NotificationSchedule</td>
+</tr>
+<tr>
+    <td><code>reports</code></td>
+    <td>گزارش و داشبورد</td>
+    <td>گزارش فروش روزانه/ماهانه، ضایعات، سود و زیان، داشبورد بلادرنگ، گزارش جغرافیایی Heatmap.</td>
+    <td>ReportDefinition, SavedReport, DashboardWidget, GeoReport</td>
+</tr>
+<tr>
+    <td><code>approval_workflow</code></td>
+    <td>جریان تأیید</td>
+    <td>مدیریت صف تأیید مدیر برای پیش‌نویس‌های فروش عامل و سفارش‌های فروشگاه، با reason در صورت رد.</td>
+    <td>ApprovalQueue, ApprovalDecision, ApprovalRule</td>
+</tr>
+<tr>
+    <td><code>store_portal</code></td>
+    <td>پورتال فروشگاه</td>
+    <td>سفارش آنلاین فروشگاه، پیگیری سفارش، کاتالوگ، گزارش خرید، مانده حساب.</td>
+    <td>StoreOrder, StoreOrderLine, StoreNotification, StoreDashboard</td>
+</tr>
+<tr>
+    <td><code>payments</code></td>
+    <td>پرداخت و درگاه</td>
+    <td>یکپارچگی با ۳ درگاه (زرین‌پال، آیدی‌پی، پارسیان)، تراکنش‌های آنلاین، ثبت چک و نقدی، تسویه.</td>
+    <td>PaymentTransaction, PaymentGateway, CheckPayment, CashReceipt</td>
+</tr>
+<tr>
+    <td><code>loyalty</code></td>
+    <td>وفاداری و Smart Reorder</td>
+    <td>محاسبه امتیاز پویای هر فروشگاه، پیشنهاد سفارش هوشمند، تخفیف خودکار VIP.</td>
+    <td>LoyaltyTier, LoyaltyTransaction, ReorderSuggestion, DiscountRule</td>
+</tr>
+<tr>
+    <td><code>barcode</code></td>
+    <td>بارکد و QR</td>
+    <td>تولید بارکد برای هر محصول/لات/سفارش، اسکن از موبایل، ردیابی چرخه زندگی.</td>
+    <td>Barcode, BarcodeScan, QrCode</td>
+</tr>
+<tr>
+    <td><code>saman_tax</code></td>
+    <td>صورت‌حساب الکترونیکی</td>
+    <td>یکپارچگی با سامانه مالیاتی سامان، تولید و ارسال فاکتور، دریافت UID، کنترل وضعیت.</td>
+    <td>TaxInvoice, TaxInvoiceStatus, SamanConfig</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۳.۲ الگوی Service-Repository</h2>
+<p>برای حفظ جداسازی لایه‌ها، هر App از سه لایه داخلی تشکیل شده است. لایه <strong>View/Serializer</strong> مسئول اعتبارسنجی ورودی و تبدیل داده به JSON است. لایه <strong>Service</strong> منطق کسب‌وکار را در خود جای داده و تمام تراکنش‌های DB را مدیریت می‌کند. لایه <strong>Repository</strong> دسترسی به داده‌ها را کپسوله می‌کند و اجازه می‌دهد در آینده منبع داده (مثلاً برای Migration به Microservice) بدون تأثیر بر Service تغییر کند.</p>
+
+<div class="code-block"># ساختار پوشه‌بندی هر App
+products/
+├── models.py          # مدل‌های DB
+├── repositories/
+│   ├── product_repo.py
+│   └── category_repo.py
+├── services/
+│   ├── product_service.py     # منطق کسب‌وکار
+│   ├── price_service.py
+│   └── bom_service.py         # فرمول تولید
+├── serializers/
+│   ├── product_serializer.py
+│   └── category_serializer.py
+├── views/
+│   ├── product_viewset.py     # API endpoints
+│   └── category_viewset.py
+├── signals.py          # Signal handlers (یکپارچگی)
+├── tasks.py            # Celery tasks (Async)
+├── selectors.py        # کوئری‌های پیچیده Read
+└── tests/
+    ├── test_product_service.py
+    └── test_product_api.py</div>
+
+<h2 class="subsection-title">۳.۳ کنترل دسترسی RBAC</h2>
+<p>سیستم نقش‌ها با ۵ نقش اصلی طراحی شده است که هر کدام مجموعه مشخصی از Permission‌ها دارند. این نقش‌ها در جدول <code>Role</code> تعریف و در <code>Permission</code> به‌صورت دقیق (per-action: view, add, change, delete, approve) کنترل می‌شوند. پیاده‌سازی از طریق یک Middleware سفارشی و DRF Permission Class انجام می‌شود که در هر درخواست، نقش کاربر و Permission مورد نیاز را بررسی می‌کند. نقش جدید <code>StoreOwner</code> نسبت به نسخه ۱.۰ اضافه شده تا دسترسی‌های فروشگاه‌ها به پورتال B2B کنترل بشه.</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 18%;">نقش</th>
+    <th style="width: 32%;">دسترسی‌های کلیدی</th>
+    <th style="width: 50%;">محدودیت‌ها</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><strong>مدیر</strong></td>
+    <td>تمام گزارش‌ها، تأیید/رد پیش‌نویس‌های عامل و سفارش‌های فروشگاه، تأیید انتقال FEFO، تنظیمات سیستم، تعریف محصول و کاربر.</td>
+    <td>دسترسی به اسناد حسابداری فقط در حالت Read. عدم امکان ویرایش سند ثبت‌شده (فقط معکوس).</td>
+</tr>
+<tr>
+    <td><strong>حسابدار</strong></td>
+    <td>ثبت سند دستی، کنترل توازن، تسویه روزانه، گزارش‌های مالی، تأیید پرداخت‌های آنلاین.</td>
+    <td>عدم دسترسی به تعریف محصول، عدم تغییر در موجودی انبار (فقط مشاهده).</td>
+</tr>
+<tr>
+    <td><strong>انباردار</strong></td>
+    <td>ثبت تولید، ثبت ورود/خروج کالا، تأیید انتقال بین انبارها، بارگیری سفارش‌ها.</td>
+    <td>عدم دسترسی به قیمت‌گذاری، عدم مشاهده سود و زیان، عدم دسترسی به کاربران.</td>
+</tr>
+<tr>
+    <td><strong>عامل پخش</strong></td>
+    <td>ثبت پیش‌نویس فروش (Draft)، ثبت تحویل امانی، مشاهده سبد پخش روزانه، اسکن بارکد، مشاهده موجودی فروشگاه‌های اختصاص‌یافته.</td>
+    <td>فروش به‌صورت پیش‌نویس است تا مدیر تأیید کند. عدم دسترسی به بهای تمام‌شده.</td>
+</tr>
+<tr>
+    <td><strong>فروشگاه (StoreOwner)</strong></td>
+    <td>ثبت سفارش آنلاین، مشاهده کاتالوگ، پرداخت آنلاین بدهی، مشاهده گزارش خرید و مانده حساب، درخواست برگشت.</td>
+    <td>فقط سفارش برای خود فروشگاه. سقف اعتبار در سفارش اعمال می‌شود. تأیید نهایی سفارش توسط مدیر لازم است.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-success">
+    <div class="callout-title">پیاده‌سازی امنیتی</div>
+    <p class="callout-body">علاوه بر RBAC، تمام API‌ها از Rate Limiting (۱۲۰ درخواست در دقیقه برای هر کاربر) و JWT با Refresh Token کوتاه (۱۵ دقیقه) و Long Token (۷ روز) استفاده می‌کنند. تمام عملیات حساس (حذف، تأیید انتقال، ثبت سند حسابداری) با Soft Delete و Activity Log همراه است تا هیچ داده‌ای به‌طور فیزیکی حذف نشود و هر تغییر قابل ردیابی باشد.</p>
+</div>
+
+<!-- ============ SECTION 4: Database & ERD ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 04</div>
+    <div class="section-title">طراحی پایگاه داده و ERD</div>
+    <div class="section-subtitle">۴۹ جدول در ۶ گروه منطقی با روابط کلیدی و کنترل‌های یکپارچگی</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۴.۱ نمای کلی ۴۹ جدول</h2>
+<p>پایگاه داده مرکزی شامل ۴۹ جدول است که در ۶ گروه منطقی دسته‌بندی شده‌اند. ۸ جدول جدید نسبت به نسخه ۱.۰ برای پشتیبانی از موبایل عوامل، پورتال فروشگاه‌ها، پرداخت آنلاین، بارکد و سامان اضافه شده‌اند. تمام جداول از کلید اصلی <code>id</code> (BIGINT AUTO_INCREMENT)، فیلدهای ردیابی <code>created_at</code>، <code>updated_at</code>، <code>created_by</code> و در صورت نیاز <code>deleted_at</code> (Soft Delete) استفاده می‌کنند.</p>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-value">۶</div>
+        <div class="stat-label">جدول پایه</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">۷</div>
+        <div class="stat-label">انبار و تولید</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">۱۲</div>
+        <div class="stat-label">فروش و پخش</div>
+    </div>
+</div>
+<div class="stat-grid" style="margin-top: -8px;">
+    <div class="stat-card">
+        <div class="stat-value">۶</div>
+        <div class="stat-label">حسابداری</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">۸</div>
+        <div class="stat-label">موبایل و پورتال (جدید)</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">۱۰</div>
+        <div class="stat-label">سیستمی</div>
+    </div>
+</div>
+
+<h2 class="subsection-title">۴.۲ گروه ۱ — جداول پایه (۶ جدول)</h2>
+<p>این جداول هسته داده‌های اصلی سیستم را نگه‌داری می‌کنند و به‌ندرت تغییر می‌کنند. تمام جداول دیگر به این جداول ارجاع دارند. طراحی این جداول باید در فاز ۱ پروژه کاملاً تثبیت شود زیرا تغییر در آن‌ها در فازهای بعد به‌سختی انجام می‌شود.</p>
+
+<div class="erd-group">
+    <div class="erd-entity erd-entity-strong">Products (محصولات)</div>
+    <div class="erd-entity erd-entity-strong">ProductCategories (دسته‌بندی)</div>
+    <div class="erd-entity erd-entity-strong">Stores (فروشگاه‌ها)</div>
+    <div class="erd-entity erd-entity-strong">Distributors (عوامل پخش)</div>
+    <div class="erd-entity erd-entity-strong">Customers (مشتریان آنلاین)</div>
+    <div class="erd-entity erd-entity-strong">Accounts (کدینگ حساب‌ها)</div>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 22%;">جدول</th>
+    <th style="width: 30%;">فیلدهای کلیدی</th>
+    <th style="width: 48%;">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><code>Products</code></td>
+    <td>id, code, name, category_id, unit_id, shelf_life_days, default_price, is_active</td>
+    <td>۳۰+ محصول با کد یکتا، مدت ماندگاری، قیمت پایه. shelf_life_days برای FEFO.</td>
+</tr>
+<tr>
+    <td><code>ProductCategories</code></td>
+    <td>id, name, parent_id, level</td>
+    <td>ساختار درختی (Self-Reference) با ۳ سطح: گروه A → گروه A - نوع ۱.</td>
+</tr>
+<tr>
+    <td><code>Stores</code></td>
+    <td>id, code, name, address, phone, geo_lat, geo_lng, distributor_id, sales_model, is_active</td>
+    <td>۲۰۰ فروشگاه با مختصات GPS و مدل فروش (امانی/قطعی/ترکیبی).</td>
+</tr>
+<tr>
+    <td><code>Distributors</code></td>
+    <td>id, code, name, mobile, vehicle_id, default_route, commission_rate</td>
+    <td>۳ عامل با مسیر پیش‌فرض و درصد پورسانت.</td>
+</tr>
+<tr>
+    <td><code>Customers</code></td>
+    <td>id, type, name, phone, platform (instagram/snapp/website), credit_limit</td>
+    <td>مشتریان آنلاین با سقف اعتبار.</td>
+</tr>
+<tr>
+    <td><code>Accounts</code></td>
+    <td>id, code (یکتا), name, type (asset/liability/equity/revenue/expense), parent_id, is_active</td>
+    <td>کدینگ درختی حساب‌ها با ۵ نوع اصلی. مثلاً: 1010 → موجودی کالا، 1011 → کیک کرمی.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۴.۳ گروه ۲ — انبار و تولید (۷ جدول)</h2>
+<p>این گروه قلب منطق FEFO و میانگین موزون است. هر موجودی در سیستم به‌صورت <strong>Lots</strong> ردیابی می‌شود که یک لات معادل یک بچ تولید در یک تاریخ خاص است. تمام حرکت‌ها (ورود، خروج، انتقال، برگشت) در جدول <code>InventoryMovements</code> ثبت و موجودی لحظه‌ای در <code>InventoryLots</code> نگه‌داری می‌شود.</p>
+
+<div class="erd-group">
+    <div class="erd-entity erd-entity-strong">InventoryLots (لات‌های انبار)</div>
+    <div class="erd-entity erd-entity-strong">InventoryMovements (حرکت‌ها)</div>
+    <div class="erd-entity erd-entity-strong">ProductionBatches (بچ تولید)</div>
+    <div class="erd-entity erd-entity-strong">ProductionConsumption (مصرف مواد)</div>
+    <div class="erd-entity erd-entity-strong">ProductionOutputs (خروج محصول)</div>
+    <div class="erd-entity erd-entity-strong">Warehouses (انبارها)</div>
+    <div class="erd-entity erd-entity-strong">StockBalances (موجودی لحظه‌ای)</div>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 24%;">جدول</th>
+    <th style="width: 32%;">فیلدهای کلیدی</th>
+    <th style="width: 44%;">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><code>InventoryLots</code></td>
+    <td>id, product_id, batch_no, production_date, expiry_date, initial_qty, current_qty, weighted_avg_cost, warehouse_id, status</td>
+    <td>هر لات معادل یک بچ تولید. expiry_date برای FEFO. weighted_avg_cost میانگین موزون.</td>
+</tr>
+<tr>
+    <td><code>InventoryMovements</code></td>
+    <td>id, lot_id, movement_type (in/out/transfer/return), qty, ref_doc_type, ref_doc_id, warehouse_id, created_at</td>
+    <td>تاریخچه کامل حرکت با ارجاع به سند مبدأ (فروش، تولید، انتقال).</td>
+</tr>
+<tr>
+    <td><code>ProductionBatches</code></td>
+    <td>id, batch_no, product_id, planned_qty, actual_qty, start_at, end_at, status, weighted_avg_cost</td>
+    <td>هر بار تولید یک بچ با مقدار برنامه‌ریزی و واقعی و محاسبه بهای تمام‌شده.</td>
+</tr>
+<tr>
+    <td><code>ProductionConsumption</code></td>
+    <td>id, batch_id, material_lot_id, qty_consumed, cost_at_consumption</td>
+    <td>مواد اولیه مصرفی برای هر بچ با هزینه لحظه‌ای.</td>
+</tr>
+<tr>
+    <td><code>ProductionOutputs</code></td>
+    <td>id, batch_id, product_id, qty_produced, qty_waste, lot_id (به InventoryLots)</td>
+    <td>خروج محصول نهایی با محاسبه ضایعات و تولید لات جدید.</td>
+</tr>
+<tr>
+    <td><code>Warehouses</code></td>
+    <td>id, code, name, type (main/store/virtual), store_id (nullable), is_active</td>
+    <td>انبار اصلی کارگاه + ۲۰۰ انبار مجازی هر فروشگاه (امانی).</td>
+</tr>
+<tr>
+    <td><code>StockBalances</code></td>
+    <td>id, product_id, warehouse_id, total_qty, total_value, last_lot_id, updated_at</td>
+    <td>موجودی تجمیعی هر محصول در هر انبار (Cache برای عملکرد بالا).</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۴.۴ گروه ۳ — فروش و پخش (۱۲ جدول)</h2>
+<p>گروه فروش شامل تمام اسناد مرتبط با چرخه پخش و فروش است. هر سند از ساختار Header-Line استفاده می‌کند که در آن Header اطلاعات کلی سند (شماره، تاریخ، عامل، فروشگاه) و Line‌ها اقلام جزئی (محصول، تعداد، قیمت، لات) را نگه‌داری می‌کنند. این الگو اجازه می‌دهد یک سند چندین محصول را در یک تراکنش ثبت کند.</p>
+
+<div class="erd-group">
+    <div class="erd-entity erd-entity-strong">DispatchHeaders</div>
+    <div class="erd-entity erd-entity-strong">DispatchLines</div>
+    <div class="erd-entity erd-entity-strong">SalesHeaders</div>
+    <div class="erd-entity erd-entity-strong">SalesLines</div>
+    <div class="erd-entity erd-entity-strong">ReturnHeaders</div>
+    <div class="erd-entity erd-entity-strong">ReturnLines</div>
+    <div class="erd-entity erd-entity-strong">TransferHeaders</div>
+    <div class="erd-entity erd-entity-strong">TransferLines</div>
+    <div class="erd-entity">Routes (مسیرها)</div>
+    <div class="erd-entity">Vehicles (خودروها)</div>
+    <div class="erd-entity">PricingRules</div>
+    <div class="erd-entity">SalesPersonVisits</div>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 22%;">جدول</th>
+    <th style="width: 30%;">فیلدهای کلیدی</th>
+    <th style="width: 48%;">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><code>DispatchHeaders</code></td>
+    <td>id, dispatch_no, distributor_id, dispatch_date, total_qty, status, vehicle_id</td>
+    <td>سند پخش به عامل با مجموع اقلام و وضعیت (pending/in_transit/arrived).</td>
+</tr>
+<tr>
+    <td><code>DispatchLines</code></td>
+    <td>id, dispatch_id, product_id, lot_id, qty, dest_store_id</td>
+    <td>اقلام پخش با مقصد هر فروشگاه.</td>
+</tr>
+<tr>
+    <td><code>SalesHeaders</code></td>
+    <td>id, sale_no, store_id, sale_date, sales_type (consignment/firm), total_amount, total_cost, status, journal_id</td>
+    <td>سند فروش با نوع امانی یا قطعی و ارجاع به سند حسابداری.</td>
+</tr>
+<tr>
+    <td><code>SalesLines</code></td>
+    <td>id, sale_id, product_id, lot_id, qty, unit_price, total_price, unit_cost, line_total</td>
+    <td>اقلام فروش با لات مشخص (برای FEFO) و بهای تمام‌شده لحظه‌ای.</td>
+</tr>
+<tr>
+    <td><code>ReturnHeaders</code></td>
+    <td>id, return_no, store_id, return_date, original_sale_id, total_qty, reason</td>
+    <td>برگشت از فروشگاه با علت (منقضی/م شکسته/قابل فروش).</td>
+</tr>
+<tr>
+    <td><code>ReturnLines</code></td>
+    <td>id, return_id, product_id, lot_id, qty, condition (sellable/expired/damaged)</td>
+    <td>اقلام برگشت با وضعیت که تعیین می‌کند کالا به انبار برمی‌گردد یا ضایعات.</td>
+</tr>
+<tr>
+    <td><code>TransferHeaders</code></td>
+    <td>id, transfer_no, from_store, to_store, transfer_date, status, initiator_id</td>
+    <td>انتقال بین دو فروشگاه با تأیید دوطرفه ( initiator و receiver).</td>
+</tr>
+<tr>
+    <td><code>TransferLines</code></td>
+    <td>id, transfer_id, product_id, lot_id, qty, expiry_date</td>
+    <td>اقلام انتقال با لات و تاریخ انقضا برای تأیید FEFO.</td>
+</tr>
+<tr>
+    <td><code>Routes</code></td>
+    <td>id, distributor_id, day_of_week, store_sequence (JSON)</td>
+    <td>مسیر هر عامل در هر روز هفته با ترتیب فروشگاه‌ها.</td>
+</tr>
+<tr>
+    <td><code>Vehicles</code></td>
+    <td>id, plate, capacity, driver_name, fuel_card</td>
+    <td>خودروهای پخش با ظرفیت.</td>
+</tr>
+<tr>
+    <td><code>PricingRules</code></td>
+    <td>id, product_id, store_tier (A/B/C), min_price, default_price, effective_date</td>
+    <td>قیمت‌گذاری پویا بر اساس لایه فروشگاه (پرفروش/A، متوسط/B، کم‌فروش/C).</td>
+</tr>
+<tr>
+    <td><code>SalesPersonVisits</code></td>
+    <td>id, distributor_id, store_id, visit_date, check_in_time, check_out_time, sales_count</td>
+    <td>ردیابی سرکشی روزانه عامل با GPS و زمان ورود/خروج.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۴.۵ گروه ۴ — حسابداری (۶ جدول)</h2>
+<p>گروه حسابداری از منطق Double-Entry استاندارد پیروی می‌کند. هر سند حسابداری (<code>JournalHeader</code>) چندین خط (<code>JournalLine</code>) دارد که مجموع بدهکارها باید با مجموع بستانکارها برابر باشد. این تضمین توسط یک <strong>Database Trigger</strong> در PostgreSQL کنترل می‌شود تا در صورتی که یک تراکنش تلاش کند سند نامتوازن ثبت کند، کل تراکنش Reject شود.</p>
+
+<div class="erd-group">
+    <div class="erd-entity erd-entity-strong">JournalHeaders</div>
+    <div class="erd-entity erd-entity-strong">JournalLines</div>
+    <div class="erd-entity erd-entity-strong">Accounts</div>
+    <div class="erd-entity erd-entity-strong">FiscalPeriods</div>
+    <div class="erd-entity erd-entity-strong">CostCenters</div>
+    <div class="erd-entity erd-entity-strong">JournalTemplates</div>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 22%;">جدول</th>
+    <th style="width: 32%;">فیلدهای کلیدی</th>
+    <th style="width: 46%;">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><code>JournalHeaders</code></td>
+    <td>id, journal_no, date, source_type (sale/purchase/transfer/manual), source_id, total_debit, total_credit, status, period_id</td>
+    <td>سند حسابداری با نوع منبع تولیدکننده و کنترل توازن در DB Trigger.</td>
+</tr>
+<tr>
+    <td><code>JournalLines</code></td>
+    <td>id, journal_id, account_id, debit, credit, cost_center_id, description, ref_doc_id</td>
+    <td>خطوط سند با حساب، مبلغ بدهکار و بستانکار.</td>
+</tr>
+<tr>
+    <td><code>FiscalPeriods</code></td>
+    <td>id, name, start_date, end_date, is_closed, closed_at</td>
+    <td>دوره‌های مالی (ماهانه/سالانه) با امکان بستن دوره و جلوگیری از ویرایش.</td>
+</tr>
+<tr>
+    <td><code>CostCenters</code></td>
+    <td>id, code, name, parent_id, type</td>
+    <td>مرکز هزینه (خط تولید، دپارتمان، انبار) برای تحلیل سود/زیان دقیق.</td>
+</tr>
+<tr>
+    <td><code>JournalTemplates</code></td>
+    <td>id, name, source_type, template_json (حساب‌های بدهکار و بستانکار پیش‌فرض)</td>
+    <td>قالب‌های سند خودکار: فروش → موجودی کالا بستانکار، درآمد فروش بدهکار.</td>
+</tr>
+<tr>
+    <td><code>ExchangeRates</code></td>
+    <td>id, currency, rate, effective_date</td>
+    <td>نرخ ارز برای گزارش‌های مالی چندارزی (در صورت صادرات).</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۴.۶ گروه ۵ — موبایل، پورتال و پرداخت (۸ جدول جدید)</h2>
+<p>این ۸ جدول برای پشتیبانی از قابلیت‌های جدید نسخه ۲.۰ اضافه شده‌اند. این جداول چرخه کامل از پیش‌نویس موبایل عامل تا پرداخت آنلاین و صورت‌حساب الکترونیکی را پوشش می‌دهند. هر سند در این گروه دارای جریان تأیید مشخصی است که در بخش ۹ و ۱۰ به‌طور کامل توضیح داده شده است.</p>
+
+<div class="erd-group">
+    <div class="erd-entity erd-entity-strong">SalesDraftHeaders (پیش‌نویس عامل)</div>
+    <div class="erd-entity erd-entity-strong">SalesDraftLines</div>
+    <div class="erd-entity erd-entity-strong">ApprovalQueue (صف تأیید)</div>
+    <div class="erd-entity erd-entity-strong">StoreOrders (سفارش فروشگاه)</div>
+    <div class="erd-entity erd-entity-strong">StoreOrderLines</div>
+    <div class="erd-entity erd-entity-strong">PaymentTransactions (تراکنش آنلاین)</div>
+    <div class="erd-entity erd-entity-strong">TaxInvoices (صورت‌حساب سامان)</div>
+    <div class="erd-entity erd-entity-strong">Barcodes (بارکد/QR)</div>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 22%;">جدول</th>
+    <th style="width: 36%;">فیلدهای کلیدی</th>
+    <th style="width: 42%;">توضیح</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><code>SalesDraftHeaders</code></td>
+    <td>id, draft_no, distributor_id, store_id, draft_date, sales_type, status (pending/reviewing/approved/rejected), total_amount, sync_status (offline/synced), device_id</td>
+    <td>پیش‌نویس فروش ثبت‌شده توسط عامل در گوشی. تا تأیید مدیر هیچ اثر انبار و حسابداری ندارد.</td>
+</tr>
+<tr>
+    <td><code>SalesDraftLines</code></td>
+    <td>id, draft_id, product_id, lot_id (nullable), qty, unit_price, barcode_scanned, manual_entry</td>
+    <td>اقلام پیش‌نویس با اطلاعات اسکن بارکد یا ورود دستی.</td>
+</tr>
+<tr>
+    <td><code>ApprovalQueue</code></td>
+    <td>id, ref_doc_type (sales_draft/store_order/transfer), ref_doc_id, requested_by, assigned_to, status, decision_reason, decided_at, priority</td>
+    <td>صف مرکزی تأیید مدیر. هر سند منتظر تأیید، یک رکورد در این جدول می‌سازد.</td>
+</tr>
+<tr>
+    <td><code>StoreOrders</code></td>
+    <td>id, order_no, store_id, order_date, status, total_amount, total_qty, payment_status, expected_delivery, delivery_address</td>
+    <td>سفارش ثبت‌شده توسط فروشگاه از پورتال PWA. پس از تأیید مدیر به سند پخش تبدیل می‌شود.</td>
+</tr>
+<tr>
+    <td><code>StoreOrderLines</code></td>
+    <td>id, order_id, product_id, qty, unit_price, line_total, is_smart_suggestion</td>
+    <td>اقلام سفارش. اگر اقلم از پیشنهاد Smart Reorder آمده باشد، flag می‌خورد.</td>
+</tr>
+<tr>
+    <td><code>PaymentTransactions</code></td>
+    <td>id, transaction_no, store_id, gateway (zarinpal/idpay/parsian), amount, status (initiated/paid/failed/verified), authority, ref_id, paid_at, related_doc_type, related_doc_id</td>
+    <td>تراکنش‌های پرداخت آنلاین با تفاوت Authority (قبل از پرداخت) و RefID (پس از پرداخت).</td>
+</tr>
+<tr>
+    <td><code>TaxInvoices</code></td>
+    <td>id, store_id, sales_id, saman_uid, invoice_status (draft/sent/confirmed/canceled), header_data (JSON), body_data (JSON), sent_at, confirmed_at</td>
+    <td>صورت‌حساب الکترونیکی سامان. header_data و body_data ساختار JSON استاندارد سامان.</td>
+</tr>
+<tr>
+    <td><code>Barcodes</code></td>
+    <td>id, entity_type (product/lot/sales_order/store_order), entity_id, barcode_value (EAN-13), qr_code_data, created_at</td>
+    <td>بارکد و QR برای هر موجودیت قابل اسکن. در فاز ۷ تولید می‌شود.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۴.۷ گروه ۶ — جداول سیستمی (۱۰ جدول)</h2>
+<p>این جداول توسط خود Django و کتابخانه‌های جانبی استفاده می‌شوند. برخی از این جداول (User, Permission, Group) توسط Django Auth ارائه می‌شوند و بقی توسط پکیج‌های DRF، Celery و Custom Apps اضافه می‌گردند.</p>
+
+<div class="erd-group">
+    <div class="erd-entity">Users (Django Auth)</div>
+    <div class="erd-entity">Groups (Django Auth)</div>
+    <div class="erd-entity">Permissions (Django)</div>
+    <div class="erd-entity">UserProfiles</div>
+    <div class="erd-entity">ActivityLogs</div>
+    <div class="erd-entity">CeleryTaskMeta</div>
+    <div class="erd-entity">CeleryTaskResults</div>
+    <div class="erd-entity">DjangoSessions</div>
+    <div class="erd-entity">DjangoMigrations</div>
+    <div class="erd-entity">DjangoAdminLog</div>
+</div>
+
+<h2 class="subsection-title">۴.۸ روابط کلیدی ERD</h2>
+<p>روابط بین جداول در نمودار ERD پیچیده است (با ۴۹ جدول، بیش از ۸۰ رابطه وجود دارد). در اینجا روابط بحرانی که منطق کسب‌وکار را شکل می‌دهند خلاصه شده‌اند. روابط دیگر از طریق Foreign Key‌های مشخص شده در جداول بالا قابل استنباط هستند:</p>
+
+<ul>
+    <li><strong>InventoryLots ↔ SalesLines:</strong> یک به چند. هر SalesLine به یک Lot مشخص ارجاع می‌دهد که تضمین می‌کند ردیابی FEFO در سطح اقلام فروش انجام شود.</li>
+    <li><strong>ProductionBatches ↔ InventoryLots:</strong> یک به یک. هر بچ تولید، یک Lot جدید در InventoryLots ایجاد می‌کند.</li>
+    <li><strong>SalesHeaders ↔ JournalHeaders:</strong> یک به یک (یک اختیاری). هر سند فروش پس از commit، یک سند حسابداری خودکار تولید می‌کند.</li>
+    <li><strong>Stores ↔ Warehouses:</strong> یک به یک. هر فروشگاه یک انبار مجازی (Virtual Warehouse) برای مدل امانی دارد.</li>
+    <li><strong>Distributors ↔ Stores:</strong> چند به چند (از طریق جدول Routes). هر عامل چند فروشگاه را سرو می‌کند و هر فروشگاه ممکن است توسط چند عامل در روزهای مختلف سرو شود.</li>
+    <li><strong>Accounts (Self-Reference):</strong> یک به چند (parent_id). ساختار درختی کدینگ حسابداری.</li>
+    <li><strong>ReturnHeaders ↔ SalesHeaders:</strong> چند به یک. هر برگشت به یک فروش اصلی ارجاع می‌دهد.</li>
+    <li><strong>TransferHeaders ↔ Stores (دو بار):</strong> از from_store و to_store. یک سند انتقال بین دو فروشگاه.</li>
+    <li><strong>SalesDraftHeaders ↔ ApprovalQueue:</strong> یک به یک. هر پیش‌نویس عامل، یک رکورد در صف تأیید می‌سازد. پس از تأیید، رکورد SalesHeader ایجاد می‌شود.</li>
+    <li><strong>StoreOrders ↔ ApprovalQueue:</strong> یک به یک. هر سفارش فروشگاه وارد صف تأیید می‌شود.</li>
+    <li><strong>StoreOrders ↔ PaymentTransactions:</strong> یک به چند. چندین پرداخت ممکن است برای یک سفارش انجام شود (مثلاً ۵۰٪ آنلاین، ۵۰٪ چکی).</li>
+    <li><strong>SalesHeaders ↔ TaxInvoices:</strong> یک به یک. هر فروش قطعی پس از commit، یک صورت‌حساب سامان می‌سازد.</li>
+    <li><strong>Barcodes ↔ (Product/Lot/SalesOrder):</strong> چندریختی (Polymorphic). هر بارکد به یکی از موجودیت‌ها ارجاع می‌دهد (entity_type + entity_id).</li>
+    <li><strong>Stores ↔ LoyaltyPoint:</strong> یک به چند. هر فروشگاه چندین تراکنش وفاداری دارد که امتیاز پویای فعلی محاسبه می‌شود.</li>
+</ul>
+
+<!-- ============ SECTION 5: Weighted Average ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 05</div>
+    <div class="section-title">منطق کسب‌وکار: میانگین موزون</div>
+    <div class="section-subtitle">محاسبه بهای تمام‌شده با روش Weighted Average Cost</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۵.۱ تعریف و دلیل انتخاب</h2>
+<p>روش میانگین موزون (Weighted Average Cost) برای محاسبه بهای تمام‌شده انتخاب شده زیرا این روش با ماهیت تولید کارگاهی هماهنگ است: مواد اولیه (آرد، شکر، کره، تخم‌مرغ) در خریدهای متعدد و با قیمت‌های متغیر وارد انبار می‌شوند و سپس در بچ‌های تولید مصرف می‌شوند. اختصاص هزینه هر خرید به هر بچ خاص (روش FIFO برای مواد) پیچیدگی عملیاتی بالا دارد و روش میانگین موزون با یکپارچه‌سازی هزینه تمام مواد در یک متغیر، این فرایند را ساده می‌کند.</p>
+
+<p>در روش میانگین موزون، هر بار ورود کالا به انبار (چه از طریق خرید و چه تولید)، هزینه متوسط کالا در انبار بر اساس میانگین وزنی موجودی قبلی و ورودی جدید محاسبه می‌شود. این متوسط وزنی به‌عنوان بهای تمام‌شده هر واحد در خروج‌های بعدی (مثل فروش یا مصرف در تولید) استفاده می‌شود. این روش به‌طور خودکار توسط Service Layer پیاده‌سازی می‌شود و نیازی به محاسبه دستی حسابدار ندارد.</p>
+
+<h2 class="subsection-title">۵.۲ فرمول محاسبه</h2>
+<p>فرمول پایه میانگین موزون پس از هر ورود جدید به انبار به‌صورت زیر است. این فرمول در هر بار <code>InventoryMovement</code> از نوع <code>in</code> اجرا می‌شود و فیلد <code>weighted_avg_cost</code> در <code>InventoryLots</code> را به‌روز می‌کند:</p>
+
+<div class="callout">
+    <div class="callout-title">فرمول اصلی میانگین موزون</div>
+    <p class="callout-body" style="direction: ltr; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 14px;">New Weighted Avg = (Existing Qty × Old Avg) + (New Qty × New Unit Cost) / (Existing Qty + New Qty)</p>
+</div>
+
+<p>به‌طور مشخص، در سیستم این فرمول در یک <strong>Database Function</strong> در PostgreSQL به‌صورت زیر پیاده‌سازی می‌شود تا اطمینان حاصل شود که در صورت دسترسی همزمان چند کاربر به داده‌های موجودی، محاسبه به‌درستی و به‌صورت اتمیک انجام می‌شود:</p>
+
+<div class="code-block">-- PostgreSQL Function: محاسبه میانگین موزون پس از ورود
+CREATE OR REPLACE FUNCTION update_weighted_avg(
+    p_lot_id BIGINT,
+    p_in_qty NUMERIC(14,3),
+    p_in_unit_cost NUMERIC(18,4)
+) RETURNS NUMERIC(18,4) AS $$
+DECLARE
+    v_existing_qty NUMERIC(14,3);
+    v_old_avg NUMERIC(18,4);
+    v_new_avg NUMERIC(18,4);
+BEGIN
+    SELECT current_qty, weighted_avg_cost
+      INTO v_existing_qty, v_old_avg
+      FROM inventory_lots
+     WHERE id = p_lot_id
+       FOR UPDATE;  -- قفل ردیف برای جلوگیری از Race Condition
+
+    v_new_avg := ((v_existing_qty * v_old_avg) + (p_in_qty * p_in_unit_cost))
+                 / (v_existing_qty + p_in_qty);
+
+    UPDATE inventory_lots
+       SET weighted_avg_cost = v_new_avg,
+           current_qty = current_qty + p_in_qty,
+           updated_at = NOW()
+     WHERE id = p_lot_id;
+
+    RETURN v_new_avg;
+END;
+$$ LANGUAGE plpgsql;</div>
+
+<h2 class="subsection-title">۵.۳ مثال عددی گام‌به‌گام</h2>
+<p>برای درک بهتر، یک مثال عددی واقعی از چرخه تولید و فروش محصول نمونه A در طول یک روز را بررسی می‌کنیم. این مثال نشان می‌دهد چگونه فرمول میانگین موزون در عمل رفتار می‌کند و چرا انتخاب این روش برای کسب‌وکار صحیح است:</p>
+
+<table class="long-table">
+<thead>
+<tr>
+    <th style="width: 10%;">گام</th>
+    <th style="width: 22%;">رویداد</th>
+    <th style="width: 14%;">ورودی</th>
+    <th style="width: 14%;">قیمت واحد</th>
+    <th style="width: 14%;">موجودی</th>
+    <th style="width: 26%;">میانگین موزون جدید</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>۱</td>
+    <td>موجودی اول دوره</td>
+    <td>—</td>
+    <td>—</td>
+    <td>۱۰۰ عدد</td>
+    <td>۲۵٬۰۰۰ ریال</td>
+</tr>
+<tr>
+    <td>۲</td>
+    <td>ورود بچ تولید (۵۰ عدد)</td>
+    <td>۵۰</td>
+    <td>۲۸٬۰۰۰ ریال</td>
+    <td>۱۵۰ عدد</td>
+    <td>=(۱۰۰×۲۵ + ۵۰×۲۸)/۱۵۰ = ۲۶٬۰۰۰ ریال</td>
+</tr>
+<tr>
+    <td>۳</td>
+    <td>فروش (۳۰ عدد)</td>
+    <td>—</td>
+    <td>—</td>
+    <td>۱۲۰ عدد</td>
+    <td>۲۶٬۰۰۰ ریال (بدون تغییر)</td>
+</tr>
+<tr>
+    <td>۴</td>
+    <td>ورود بچ تولید (۳۰ عدد)</td>
+    <td>۳۰</td>
+    <td>۳۰٬۰۰۰ ریال</td>
+    <td>۱۵۰ عدد</td>
+    <td>=(۱۲۰×۲۶ + ۳۰×۳۰)/۱۵۰ = ۲۶٬۸۰۰ ریال</td>
+</tr>
+<tr>
+    <td>۵</td>
+    <td>فروش (۶۰ عدد)</td>
+    <td>—</td>
+    <td>—</td>
+    <td>۹۰ عدد</td>
+    <td>۲۶٬۸۰۰ ریال (بدون تغییر)</td>
+</tr>
+</tbody>
+</table>
+<div class="table-caption">جدول ۱: مثال عددی محاسبه میانگین موزون در یک روز عملیاتی</div>
+
+<p>همان‌طور که در جدول مشاهده می‌شود، فروش‌ها میانگین موزون را تغییر نمی‌دهند. تنها ورودی‌های جدید (خرید یا تولید) باعث محاسبه میانگین جدید می‌شوند. این ویژگی برای تحلیل سود/زیان به‌همراه FEFO (که در بخش ۶ بررسی می‌شود) اجازه می‌دهد سود هر فروش با دقت بالا محاسبه شود.</p>
+
+<h2 class="subsection-title">۵.۴ تأثیر برگشت کالا و ضایعات</h2>
+<p>برگشت کالا از فروشگاه به انبار دو حالت دارد: (۱) کالا قابل فروش مجدد است (مثل اضافه فروشگاه که در ظاهر سالم است) که در این حالت با همان میانگین موزون قبلی به <code>InventoryLots</code> برمی‌گردد. (۲) کالا منقضی یا آسیب‌دیده است که در این حالت به‌عنوان ضایعات ثبت و میانگین موزون اقلام باقی‌مانده با فرمول معکوس (حذف از محاسبه) به‌روز می‌شود.</p>
+
+<div class="callout callout-warning">
+    <div class="callout-title">نکته محاسباتی</div>
+    <p class="callout-body">برای ضایعات، روش استاندارد این است که میانگین موزون تغییر نکند (هزینه ضایعات به‌عنوان Cost of Goods Sold ثبت می‌شود). اما اگر بخواهیم هزینه ضایعات را به سایر اقلام منتقل کنیم (روش متناسب‌سازی)، نیاز به یک Job شبانه Celery داریم که موجودی آخر ماه را بر اساس خالص (منهای ضایعات) دوباره میانگین‌گیری کند. این تصمیم باید با حسابدار ارشد کسب‌وکار در فاز ۴ گرفته شود.</p>
+</div>
+
+<!-- ============ SECTION 6: FEFO ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 06</div>
+    <div class="section-title">منطق FEFO و ردیابی بچ/لات</div>
+    <div class="section-subtitle">الگوریتم First-Expired-First-Out با شبه‌کد و سناریوهای پیچیده</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۶.۱ مفهوم FEFO و تفاوت با FIFO</h2>
+<p>روش FEFO (First-Expired-First-Out) یک نوع از روش FIFO است که در آن معیار اولویت‌بندی لات‌ها <strong>تاریخ انقضا</strong> است نه تاریخ تولید. این روش برای صنایع حساس به انقضا (غذایی، دارویی، بهداشتی) حیاتی است زیرا تضمین می‌کند کالاهای با مدت ماندگاری کمتر اول خروج کنند، در نتیجه ضایعات به حداقل می‌رسد. در کسب‌وکار تولیدی با انقضای ۱۵ روزه، حتی یک روز تأخیر در تشخیص لات مناسب می‌تواند منجر به افزایش ۱۰٪ ضایعات شود که در مقیاس سالانه هزینه قابل توجهی است.</p>
+
+<p>تفاوت کلیدی FEFO با FIFO در این است که در FIFO ترتیب ورود به انبار تعیین‌کننده خروج است، اما در FEFO ممکن است یک لات دیرتر وارد شده اما با تاریخ انقضای زودتر، اول خروج کند. این حالت در عمل وقتی رخ می‌دهد که تولید یک محصول از دو فرمول متفاوت انجام شده (مثلاً با دو نوع کره با مدت ماندگاری متفاوت) یا وقتی یک بچ تولید با تاریخ انقضای نزدیک به لات‌های موجود اضافه می‌شود.</p>
+
+<h2 class="subsection-title">۶.۲ الگوریتم انتخاب لات در فروش</h2>
+<p>هر بار که یک فروش ثبت می‌شود، Service فروش لات مناسب را برای هر خط انتخاب می‌کند. الگوریتم انتخاب شامل چند مرحله است که در شبه‌کد زیر نمایش داده شده است. این الگوریتم به‌گونه‌ای طراحی شده که در صورت نبود لات با انقضای کافی، فروش به‌صورت خودکار Block شود و عامل پخش پیام هشدار دریافت کند:</p>
+
+<div class="code-block"># services/sales_service.py
+def allocate_lots_for_sale(
+    product_id: int,
+    warehouse_id: int,
+    qty_needed: Decimal,
+    sale_date: date,
+) -> list[AllocationItem]:
+    """
+    انتخاب لات‌ها بر اساس FEFO برای یک خط فروش.
+    
+    Returns:
+        list of (lot_id, qty_from_lot) pairs
+    Raises:
+        InsufficientStockError: اگر موجودی کافی نباشد
+        NearExpiryWarning: اگر نزدیک‌ترین انقضا کمتر از ۳ روز باشد
+    """
+    # ۱. دریافت تمام لات‌های فعال این محصول در این انبار،
+    #    مرتب شده بر اساس تاریخ انقضا (صعودی)
+    lots = InventoryLot.objects.filter(
+        product_id=product_id,
+        warehouse_id=warehouse_id,
+        current_qty__gt=0,
+        status='active',
+        expiry_date__gt=sale_date,  # فقط لات‌های منقضی‌نشده
+    ).order_by('expiry_date', 'production_date').select_for_update()
+    
+    if not lots.exists():
+        raise InsufficientStockError(
+            f"موجودی برای محصول {product_id} در انبار {warehouse_id} موجود نیست"
+        )
+    
+    # ۲. هشدار انقضای نزدیک (۳ روز یا کمتر)
+    nearest_expiry = lots.first().expiry_date
+    days_to_expiry = (nearest_expiry - sale_date).days
+    if days_to_expiry &lt;= 3:
+        log_warning(
+            f"لات نزدیک به انقضا - محصول: {product_id}, "
+            f"انقضا: {nearest_expiry} ({days_to_expiry} روز)"
+        )
+    
+    # ۳. تخصیص به ترتیب FEFO
+    allocations = []
+    remaining = qty_needed
+    for lot in lots:
+        if remaining &lt;= 0:
+            break
+        take = min(lot.current_qty, remaining)
+        allocations.append(AllocationItem(
+            lot_id=lot.id,
+            qty=take,
+            unit_cost=lot.weighted_avg_cost,
+            expiry_date=lot.expiry_date,
+        ))
+        remaining -= take
+    
+    if remaining > 0:
+        raise InsufficientStockError(
+            f"موجودی ناکافی: {qty_needed - remaining} عدد موجود، "
+            f"{qty_needed} موردنیاز"
+        )
+    
+    return allocations</div>
+
+<h2 class="subsection-title">۶.۳ ردیابی بچ/لات در تمام جریان</h2>
+<p>تضمین یکپارچگی ردیابی لات در تمام چرخه زندگی محصول از تولید تا فروش، یکی از مهم‌ترین الزامات سیستم است. این ردیابی به‌گونه‌ای طراحی شده که در هر لحظه بتوان به این سوال پاسخ داد: «این محصول که در فروشگاه X فروخته شد، از کدام بچ تولید بود و با کدام بچ مواد اولیه ساخته شده بود؟»</p>
+
+<p>برای پاسخ به این سوال، چندین مکانیزم به‌صورت هم‌زمان فعال هستند. هر بچ تولید، هنگام ثبت به یک لات جدید در <code>InventoryLots</code> متصل می‌شود. تمام حرکت‌های انبار (پخش، فروش، انتقال، برگشت) در جدول <code>InventoryMovements</code> با ارجاع به <code>lot_id</code> ثبت می‌شوند. در نهایت، تمام اسناد فروش و پخش در اقلام (<code>SalesLines</code>، <code>DispatchLines</code>) با <code>lot_id</code> ذخیره می‌شوند. این زنجیره ارجاع امکان Trace-back کامل را فراهم می‌کند.</p>
+
+<div class="callout callout-success">
+    <div class="callout-title">مزیت Trace-back کامل</div>
+    <p class="callout-body">در صورت دریافت شکایت از یک فروشگاه درباره کیفیت یک محصول، سیستم در کمتر از ۱ ثانیه می‌تواند تمام فروشگاه‌هایی که همان بچ را دریافت کرده‌اند شناسایی کند و عامل پخش را برای جمع‌آوری فوری اعزام کند. این قابلیت در صنایع غذایی برای جلوگیری از آسیب به برند و سلامت مصرف‌کننده حیاتی است.</p>
+</div>
+
+<!-- ============ SECTION 7: Consignment vs Firm ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 07</div>
+    <div class="section-title">مدل فروش امانی و قطعی</div>
+    <div class="section-subtitle">تفاوت انبار و حسابداری در دو مدل فروش</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۷.۱ تعریف دو مدل</h2>
+<p>کسب‌وکار با دو مدل فروش موازی کار می‌کند که هر کدام منطق متفاوتی در انبار و حسابداری دارند. این دو مدل ممکن است برای یک فروشگاه واحد هم به‌صورت ترکیبی اعمال شوند (مثلاً ۸۰٪ امانی و ۲۰٪ قطعی برای محصولات خاص). سیستم باید بتواند این دو مدل را به‌صورت مجزا اما همزمان مدیریت کند:</p>
+
+<ul>
+    <li><strong>فروش امانی (Consignment):</strong> کارگاه کالا را به فروشگاه تحویل می‌دهد اما مالکیت کالا تا زمان فروش نهایی به مصرف‌کننده، در دست کارگاه می‌ماند. فروشگاه صرفاً به‌عنوان «نمایشگاه» عمل می‌کند. در این مدل، کالا در انبار مجازی فروشگاه (Warehouse type=virtual) ردیابی می‌شود و موجودی هنوز به کارگاه تعلق دارد.</li>
+    <li><strong>فروش قطعی (Firm Sale):</strong> کارگاه کالا را به فروشگاه می‌فروشد و مالکیت به فروشگاه منتقل می‌شود. کارگاه بابت کالا از فروشگاه طلبکار می‌شود. در این مدل، کالا از انبار کارگاه خارج شده و در تراز حسابداری به‌عنوان «درآمد فروش» و «بدهکار فروشگاه» ثبت می‌شود.</li>
+</ul>
+
+<h2 class="subsection-title">۷.۲ تفاوت در تراکنش‌های انبار و حسابداری</h2>
+<p>جدول زیر تفاوت دو مدل را در تمام جوانب نمایش می‌دهد. این تفاوت‌ها در Service Layer به‌صورت شفاف پیاده‌سازی شده‌اند و عامل پخش هنگام ثبت فروش، نوع را انتخاب می‌کند. سیستم بر اساس نوع انتخاب شده، فرایندهای متفاوتی را فعال می‌کند:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 22%;">جنبه</th>
+    <th style="width: 39%;">مدل امانی (Consignment)</th>
+    <th style="width: 39%;">مدل قطعی (Firm Sale)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><strong>انتقال کالا</strong></td>
+    <td>از انبار اصلی به انبار مجازی فروشگاه (نوع: transfer_out)</td>
+    <td>خروج مستقیم از انبار اصلی (نوع: out/sale)</td>
+</tr>
+<tr>
+    <td><strong>مالکیت کالا</strong></td>
+    <td>در دست کارگاه تا فروش نهایی</td>
+    <td>به فروشگاه منتقل می‌شود</td>
+</tr>
+<tr>
+    <td><strong>سند حسابداری هنگام پخش</strong></td>
+    <td>ثبت سند: «موجودی امانی فروشگاه» بدهکار، «موجودی انبار اصلی» بستانکار (تف Disposable)</td>
+    <td>ثبت سند: «حساب دریافتنی فروشگاه» بدهکار، «درآمد فروش + موجودی کالا» بستانکار</td>
+</tr>
+<tr>
+    <td><strong>سند حسابداری هنگام فروش</strong></td>
+    <td>ثبت سند: «درآمد فروش»، «بهای تمام‌شده فروش». خروج از انبار امانی.</td>
+    <td>هیچ سند جدیدی نیاز نیست (قبلاً در زمان پخش ثبت شده)</td>
+</tr>
+<tr>
+    <td><strong>هزینه بازگشت</strong></td>
+    <td>کالاهای برگشتی به انبار امانی برمی‌گردند (بدون تأثیر مالی)</td>
+    <td>کالاهای برگشتی به انبار اصلی برمی‌گردند و سند معکوس فروش صادر می‌شود</td>
+</tr>
+<tr>
+    <td><strong>بهای تمام‌شده</strong></td>
+    <td>در زمان فروش نهایی محاسبه می‌شود</td>
+    <td>در زمان پخش محاسبه می‌شود</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout">
+    <div class="callout-title">تصمیم‌گیری در مورد مدل</div>
+    <p class="callout-body">انتخاب مدل امانی یا قطعی برای هر فروشگاه در تنظیمات فروشگاه (فیلد <code>sales_model</code> در جدول <code>Stores</code>) تعریف می‌شود. این فیلد می‌تواند در طول زمان تغییر کند (مثلاً وقتی یک فروشگاه اعتبار بسازد، از امانی به قطعی ارتقاء می‌یابد). تغییر در این فیلد نیازمند تأیید مدیر است و در Activity Log ثبت می‌شود.</p>
+</div>
+
+<!-- ============ SECTION 8: Auto-Journal ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 08</div>
+    <div class="section-title">اتصال انبار به حسابداری (Auto-Journal)</div>
+    <div class="section-subtitle">ثبت خودکار اسناد حسابداری دوطرفه از تراکنش‌های انبار</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۸.۱ مکانیزم سیگنال‌محور</h2>
+<p>قلب یکپارچگی انبار با حسابداری، مکانیزم سیگنال‌های Django (Signals) است. هر Service انبار پس از commit موفق یک تراکنش (مثل ثبت فروش، ثبت تولید، ثبت انتقال)، یک سیگنال اختصاصی ارسال می‌کند. <code>Accounting Service</code> این سیگنال‌ها را دریافت کرده و بر اساس <code>JournalTemplate</code> مرتبط، یک سند حسابداری خودکار تولید می‌کند. این الگو جداسازی کامل بین لایه‌های انبار و حسابداری را تضمین می‌کند.</p>
+
+<p>این طراحی مزیت مهمی دارد: Service انبار نیازی به دانستن جزئیات کدینگ حسابداری ندارد. اگر حسابدار تصمیم به تغییر کد حساب (مثلاً انتقال از ۱۰۱۰ به ۲۰۱۰) بگیرد، تنها کافی است <code>JournalTemplate</code> مربوطه را به‌روز کند و تمام تراکنش‌های بعدی از کد جدید استفاده خواهند کرد. این انعطاف در محیط کسب‌وکار واقعی که تغییرات کدینگ رایج است، ارزش قابل توجهی دارد.</p>
+
+<h2 class="subsection-title">۸.۲ کنترل توازن در سطح دیتابیس</h2>
+<p>تضمین توازن بدهکار/بستانکار نباید به لایه Application محدود باشد. در سطوح همزمانی بالا، ممکن است دو درخواست همزمان سندی را ثبت کنند که به‌صورت مجزا متوازن هستند اما در تجمیع نهایی اختلاف دارند. برای جلوگیری از این حالت، یک <strong>Database Trigger</strong> در PostgreSQL به‌صورت زیر پیاده‌سازی می‌شود:</p>
+
+<div class="code-block">-- PostgreSQL Trigger: کنترل توازن سند حسابداری
+CREATE OR REPLACE FUNCTION check_journal_balance()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_total_debit NUMERIC(18,4);
+    v_total_credit NUMERIC(18,4);
+    v_diff NUMERIC(18,4);
+BEGIN
+    SELECT 
+        COALESCE(SUM(debit), 0),
+        COALESCE(SUM(credit), 0)
+    INTO v_total_debit, v_total_credit
+    FROM journal_lines
+    WHERE journal_id = NEW.journal_id;
+    
+    v_diff := v_total_debit - v_total_credit;
+    
+    -- اختلاف بیشتر از ۱ ریال = خطا
+    IF ABS(v_diff) > 1 THEN
+        RAISE EXCEPTION 'Journal not balanced. Debit: %, Credit: %, Diff: %',
+            v_total_debit, v_total_credit, v_diff;
+    END IF;
+    
+    -- به‌روزرسانی مجموع در Header
+    UPDATE journal_headers
+       SET total_debit = v_total_debit,
+           total_credit = v_total_credit,
+           updated_at = NOW()
+     WHERE id = NEW.journal_id;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_journal_balance
+AFTER INSERT OR UPDATE OR DELETE ON journal_lines
+FOR EACH ROW EXECUTE FUNCTION check_journal_balance();</div>
+
+<h2 class="subsection-title">۸.۳ سناریوی کامل: ثبت فروش و سند حسابداری</h2>
+<p>برای درک بهتر کل فرایند، سناریوی ثبت یک فروش امانی از ابتدا تا ثبت سند حسابداری را به‌صورت گام‌به‌گام مرور می‌کنیم. این سناریو نشان می‌دهد چگونه پنج لایه مختلف سیستم (API → Service → DB → Signal → Accounting) در یک فرایند واحد همکاری می‌کنند:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 8%;">گام</th>
+    <th style="width: 25%;">لایه</th>
+    <th style="width: 67%;">عملیات</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>۱</td>
+    <td>API (DRF View)</td>
+    <td>دریافت POST /api/sales/ با JSON شامل store_id، type=consignment و لیست اقلام.</td>
+</tr>
+<tr>
+    <td>۲</td>
+    <td>Serializer</td>
+    <td>اعتبارسنجی: فروشگاه وجود دارد، نوع امانی مجاز است، موجودی کافی است.</td>
+</tr>
+<tr>
+    <td>۳</td>
+    <td>Sales Service</td>
+    <td>شروع تراکنش DB. فراخوانی allocate_lots_for_sale() برای FEFO. ساخت SalesHeader و SalesLines.</td>
+</tr>
+<tr>
+    <td>۴</td>
+    <td>Inventory Service</td>
+    <td>ثبت InventoryMovements (نوع: out) برای هر لات. کاهش current_qty در InventoryLots. به‌روزرسانی StockBalances.</td>
+</tr>
+<tr>
+    <td>۵</td>
+    <td>Sales Service</td>
+    <td>commit تراکنش. ارسال سیگنال post_save روی SalesHeader.</td>
+</tr>
+<tr>
+    <td>۶</td>
+    <td>Accounting Service</td>
+    <td>دریافت سیگنال. بازیابی JournalTemplate برای type=sale, sales_type=consignment. ساخت JournalHeader و JournalLines با کدهای مناسب.</td>
+</tr>
+<tr>
+    <td>۷</td>
+    <td>PostgreSQL Trigger</td>
+    <td>کنترل توازن هر خط. در صورت نامتوازن بودن، کل تراکنش rollback و خطا لاگ می‌شود.</td>
+</tr>
+<tr>
+    <td>۸</td>
+    <td>Notification Service</td>
+    <td>ارسال پیامک تأیید به عامل پخش و در صورت لزوم به فروشگاه.</td>
+</tr>
+</tbody>
+</table>
+
+<!-- ============ SECTION 9: Distributor Mobile + Approval Workflow ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 09</div>
+    <div class="section-title">اپلیکیشن موبایل عوامل پخش + جریان تأیید</div>
+    <div class="section-subtitle">React Native با بارکدخوان نیتیو، حالت آفلاین و جریان ۴ مرحله‌ای تأیید مدیر</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۹.۱ چرا React Native؟</h2>
+<p>انتخاب React Native به‌جای PWA برای اپ عوامل پخش بر اساس سه معیار کلیدی انجام شده: (۱) <strong>بارکدخوان سریع</strong> — هر عامل روزانه ۲۰۰+ بار بارکد می‌زنه، تفاوت ۲ ثانیه‌ای PWA در هر بار جمعاً ۷ دقیقه اتلاف زمان در روز است؛ (۲) <strong>حالت آفلاین پیشرفته</strong> — عوامل در مناطق با اینترنت ناپایدار حرکت می‌کنند و نیاز به ثبت فروش بدون قطعی دارند؛ (۳) <strong>Push Notification پایدار</strong> — یادآوری سرکشی بحرانی است و باید حتی در حالت بسته بودن اپ هم دریافت بشه. React Native با Firebase Cloud Messaging این تضمین را می‌دهد.</p>
+
+<p>React Native امکان دسترسی کامل به سخت‌افزار گوشی (دوربین پیشرفته، GPS با دقت بالا، بلوتوث برای پرینتر دستی، NFC) را فراهم می‌کند. همچنین با یک کد JavaScript، هم نسخه Android و هم iOS تولید می‌شود که هزینه توسعه را نسبت به توسعه جداگانه نیتیو کاهش می‌دهد. انتشار نسخه جدید نیازمند مرور App Store/Google Play (۳-۷ روز) است که باید در نقشه راه لحاظ شود.</p>
+
+<h2 class="subsection-title">۹.۲ جریان ۴ مرحله‌ای تأیید فروش</h2>
+<p>با اضافه شدن موبایل عامل، مدل فروش از «ثبت مستقیم» به «ثبت پیش‌نویس + تأیید مدیر» تغییر می‌کند. این تغییر اعمال کنترل مدیریت روی تمام فروش‌های روزانه را قبل از اثر انبار و حسابداری فراهم می‌کند و از خطاهای عمدی یا سهوی عامل جلوگیری می‌کند. جریان چهار مرحله‌ای زیر برای تمام فروش‌ها اعمال می‌شود:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 8%;">مرحله</th>
+    <th style="width: 18%;">وضعیت</th>
+    <th style="width: 32%;">عمل</th>
+    <th style="width: 42%;">اثر سیستم</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>۱</td>
+    <td><code>pending</code></td>
+    <td>عامل در گوشی پیش‌نویس فروش (Draft) ثبت می‌کند. ممکن است آفلاین باشد.</td>
+    <td>در گوشی ذخیره می‌شود. وقتی آنترنت برگرده با سرور sync می‌شود. هیچ اثر در DB مرکزی ندارد.</td>
+</tr>
+<tr>
+    <td>۲</td>
+    <td><code>reviewing</code></td>
+    <td>مدیر در داشبورد وب، پیش‌نویس‌های pending را باز می‌کند.</td>
+    <td>یک رکورد در ApprovalQueue ساخته می‌شود با assigned_to=مدیر. پیش‌نویس قفل می‌شود.</td>
+</tr>
+<tr>
+    <td>۳</td>
+    <td><code>approved</code> یا <code>rejected</code></td>
+    <td>مدیر تأیید یا با reason رد می‌کند.</td>
+    <td>اگر تأیید: پیش‌نویس به SalesHeader تبدیل، FEFO اجرا، سند حسابداری ساخته، پیامک به فروشگاه. اگر رد: عامل در اپ پیام دریافت می‌کند.</td>
+</tr>
+<tr>
+    <td>۴</td>
+    <td><code>posted</code></td>
+    <td>سیستم خودکار، اثرات نهایی را اعمال می‌کند.</td>
+    <td>Inventory Movements ثبت، JournalLines ساخته، TaxInvoice برای فروش قطعی ارسال می‌شود.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۹.۳ معماری آفلاین و همگام‌سازی</h2>
+<p>اپ موبایل عامل باید در مناطق با اینترنت ناپایدار هم قابل استفاده باشد. معماری آفلاین به این صورت کار می‌کند: هر صبح هنگام شروع روز، اپ آخرین وضعیت موجودی هر فروشگاه اختصاص‌یافته، لیست محصولات، قیمت‌ها و مسیرها را در SQLite محلی گوشی ذخیره می‌کند (Snapshot روزانه). در طول روز، عامل می‌تواند پیش‌نویس فروش بسازد، بارکد بزند و حتی بدون اینترنت کار کند. تمام داده‌ها در IndexedDB محلی ذخیره می‌شوند.</p>
+
+<p>وقتی اینترنت برمی‌گردد، یک Background Service به‌صورت خودکار تمام پیش‌نویس‌های pending را با سرور همگام می‌کند. در صورت بروز تعارض (مثلاً موجودی عامل گفته ۵۰ عدد، اما در سرور فقط ۳۰ عدد باقی مانده چون فروشگاه از منبع دیگری کالا خریده)، خطا لاگ و به مدیر اطلاع داده می‌شود. عامل باید منتظر تأیید مدیر بماند تا تصمیم‌گیری نهایی بشه.</p>
+
+<div class="callout">
+    <div class="callout-title">تولید بارکد هنگام ثبت</div>
+    <p class="callout-body">هر پیش‌نویس پس از sync شدن، یک بارکد QR دریافت می‌کند که عامل می‌تواند آن را روی رسید چاپ‌شده (با پرینتر بلوتوث دستی) قرار دهد. این QR به مدیر اجازه می‌دهد هنگام بازبینی، با اسکن کد، فوری به جزئیات پیش‌نویس دسترسی پیدا کند.</p>
+</div>
+
+<!-- ============ SECTION 10: Store Portal + Online Payment ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 10</div>
+    <div class="section-title">پورتال فروشگاه‌ها (PWA) + پرداخت آنلاین</div>
+    <div class="section-subtitle">B2B Portal با سفارش، کاتالوگ تصویری، پرداخت آنلاین و گزارش‌گیری خودخدمتی</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۰.۱ معماری پورتال PWA</h2>
+<p>پورتال فروشگاه‌ها یک PWA سبک توسعه داده می‌شود که از طریق URL در مرورگر گوشی یا دسکتاپ قابل دسترسی است. انتخاب PWA به‌جای Native به این دلیل است: (۱) نصب آسان بدون نیاز به دانلود از App Store؛ (۲) آپدیت فوری هنگام انتشار نسخه جدید؛ (۳) حجم کار سبک‌تر از اپ عامل (فقط سفارش، پرداخت، گزارش). PWA با Service Worker و Cache API می‌تواند کاتالوگ محصولات و لیست قیمت‌ها را آفلاین نمایش دهد (بدون نیاز به اینترنت زنده).</p>
+
+<p>پورتال شامل ۵ صفحه اصلی است: داشبورد (مانده حساب + سفارش‌های اخیر)، کاتالوگ محصولات (با تصاویر و توضیحات)، سبد خرید و ثبت سفارش، پرداخت (آنلاین/چکی/نقدی)، و گزارش (خرید ماهانه + گردش حساب + اقلام امانی). تمام صفحات با dir="rtl" و تقویم جلالی طراحی شده‌اند.</p>
+
+<h2 class="subsection-title">۱۰.۲ جریان سفارش و تأیید</h2>
+<p>هر فروشگاه می‌تواند سفارش ثبت کند که در نهایت به سند پخش تبدیل می‌شود. جریان سفارش شامل ۶ مرحله است. این جریان تضمین می‌کند که سفارش‌ها قبل از تحویل، هم از نظر موجودی و هم از نظر اعتبار فروشگاه کنترل شوند:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 8%;">مرحله</th>
+    <th style="width: 22%;">وضعیت</th>
+    <th style="width: 35%;">عمل</th>
+    <th style="width: 35%;">اثر سیستم</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>۱</td>
+    <td><code>cart</code></td>
+    <td>فروشگاه اقلام را به سبد اضافه می‌کند (با کلیک یا Smart Suggestion).</td>
+    <td>در Session ذخیره می‌شود. اعتبار سنجی اولیه در فرانت‌اند.</td>
+</tr>
+<tr>
+    <td>۲</td>
+    <td><code>submitted</code></td>
+    <td>فروشگاه سفارش را ثبت می‌کند.</td>
+    <td>رکورد StoreOrder ساخته می‌شود با status=submitted. وارد ApprovalQueue می‌شود.</td>
+</tr>
+<tr>
+    <td>۳</td>
+    <td><code>under_review</code></td>
+    <td>مدیر سفارش را بازبینی می‌کند. کنترل اعتبار و موجودی.</td>
+    <td>اگر اعتبار کافی نباشد، مدیر می‌تواند سفارش را اصلاح یا رد کند.</td>
+</tr>
+<tr>
+    <td>۴</td>
+    <td><code>approved</code></td>
+    <td>مدیر سفارش را تأیید می‌کند.</td>
+    <td>سند DispatchHeader ساخته می‌شود. عامل پخش در اپ خودش می‌بیند.</td>
+</tr>
+<tr>
+    <td>۵</td>
+    <td><code>in_delivery</code></td>
+    <td>عامل سفارش را بارگیری و به فروشگاه تحویل می‌دهد.</td>
+    <td>Push Notification به فروشگاه: «سفارش شما در مسیر است».</td>
+</tr>
+<tr>
+    <td>۶</td>
+    <td><code>received</code></td>
+    <td>فروشگاه در پورتال تأیید می‌کند که دریافت کرده.</td>
+    <td>سند SalesHeader ساخته. اثر انبار و حسابداری اعمال می‌شود.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۱۰.۳ درگاه پرداخت آنلاین</h2>
+<p>یکپارچگی با ۳ درگاه پرداخت (زرین‌پال، آیدی‌پی، پارسیان) با الگوی Abstract Factory انجام شده تا در صورت قطع یکی، به‌صورت خودکار به دیگری سوییچ شود. هر درگاه یک کلاس جداگانه دارد که از <code>PaymentGatewayInterface</code> ارث می‌برد. انتخاب درگاه پیش‌فرض در تنظیمات سیستم تعریف می‌شود و در صورت خطای یک درگاه، به‌صورت خودکار به fallback منتقل می‌شود.</p>
+
+<div class="code-block"># payments/services/payment_service.py
+class PaymentService:
+    GATEWAYS = {
+        'zarinpal': ZarinpalGateway,
+        'idpay': IDPayGateway,
+        'parsian': ParsianGateway,
+    }
+
+    def initiate_payment(self, store_id, amount, related_doc):
+        gateway_name = self._select_gateway(amount)
+        gateway = self.GATEWAYS[gateway_name]()
+        tx = PaymentTransaction.objects.create(
+            store_id=store_id, amount=amount,
+            gateway=gateway_name, status='initiated',
+            related_doc_type=related_doc._meta.model_name,
+            related_doc_id=related_doc.id,
+        )
+        result = gateway.request_authority(
+            amount=amount,
+            callback_url=self._callback_url(tx.id),
+            description=f"پرداخت سفارش {related_doc.order_no}",
+        )
+        tx.authority = result['authority']
+        tx.save()
+        return {'redirect_url': result['redirect_url'], 'tx_id': tx.id}
+
+    def verify_payment(self, tx_id, status, authority):
+        tx = PaymentTransaction.objects.get(id=tx_id)
+        gateway = self.GATEWAYS[tx.gateway]()
+        if status != 'OK':
+            tx.status = 'failed'; tx.save()
+            return False
+        result = gateway.verify(authority=authority, amount=tx.amount)
+        if result['verified']:
+            tx.status = 'verified'; tx.ref_id = result['ref_id']
+            tx.paid_at = timezone.now(); tx.save()
+            self._create_payment_journal(tx)
+            if tx.related_doc_type == 'storeorder':
+                StoreOrder.objects.filter(id=tx.related_doc_id).update(
+                    payment_status='paid')
+            send_push_notification.delay(
+                store_id=tx.store_id,
+                template='payment_success',
+                context={'amount': tx.amount, 'ref_id': tx.ref_id})
+            return True
+        return False</div>
+
+<h2 class="subsection-title">۱۰.۴ کاتالوگ تصویری محصولات</h2>
+<p>هر محصول در جدول <code>Products</code> می‌تواند چندین تصویر داشته باشد که در جدول <code>ProductImages</code> ذخیره می‌شوند. تصاویر در Object Storage (MinIO یا S3) نگه‌داری می‌شوند و URL آن‌ها در دیتابیس ذخیره می‌گردد. فرانت‌اند Next.js با استفاده از <code>next/image</code> تصاویر را در چندین رزولوشن (thumbnail، medium، large) تولید و در CDN کش می‌کند تا بارگذاری سریع در گوشی‌های موبایل تضمین شود.</p>
+
+<div class="callout callout-success">
+    <div class="callout-title">بهینه‌سازی تصاویر</div>
+    <p class="callout-body">تصاویر قبل از ذخیره در Object Storage با کتابخانه Pillow به ۳ رزولوشن پردازش می‌شوند: thumbnail (150x150) برای لیست، medium (400x400) برای جزئیات، و original برای پنجره بزرگ. فرمت WebP با کیفیت ۸۰٪ حجم فایل را تا ۶۰٪ کاهش می‌دهد بدون افت کیفیت محسوس.</p>
+</div>
+
+<!-- ============ SECTION 11: Barcode/QR + Smart Reorder + Geo Heatmap ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 11</div>
+    <div class="section-title">بارکد/QR، Smart Reorder و گزارش جغرافیایی</div>
+    <div class="section-subtitle">سه قابلیت تحلیلی و عملیاتی برای افزایش سرعت و کاهش خطا</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۱.۱ بارکد و QR Code</h2>
+<p>هر محصول، لات و سند در سیستم یک بارکد یکتا دریافت می‌کند. بارکدها به دو فرمت تولید می‌شوند: <strong>EAN-13</strong> (بارکد خطی سنتی) برای محصولات و لات‌ها که با بارکدخوان‌های فیزیکی هم خوانا است، و <strong>QR Code</strong> برای اسناد (سفارش، پیش‌نویس، رسید) که با گوشی موبایل اسکن می‌شوند. انتخاب فرمت بر اساس نوع موجودیت و نحوه استفاده انجام می‌شود. بارکدها در فاز ۷ به‌صورت خودکار توسط یک Celery Task تولید می‌شوند.</p>
+
+<p>در اپ موبایل عامل، بارکدخوان نیتیو با کتابخانه <code>react-native-vision-camera</code> پیاده‌سازی شده که از تشخیص چند بارکد هم‌زمان و حالت اسکن سریع پشتیبانی می‌کند. هنگام اسکن بارکد محصول در حال ثبت پیش‌نویس فروش، سیستم به‌طور خودکار محصول را شناسایی، قیمت مخصوص آن فروشگاه را از جدول <code>PricingRules</code> می‌خواند و در سبد اضافه می‌کند. این کار سرعت ثبت فروش را ۳ برابر افزایش می‌دهد.</p>
+
+<h2 class="subsection-title">۱۱.۲ الگوریتم Smart Reorder</h2>
+<p>سیستم Smart Reorder با تحلیل داده‌های فروش هفتگی گذشته، به فروشگاه‌ها پیشنهاد سفارش می‌دهد. این پیشنهادها در پورتال PWA نمایش داده می‌شوند و فروشگاه می‌تواند با یک کلیک آن‌ها را به سبد اضافه کند. این قابلیت از یک الگوریتم پیش‌بینی ساده اما مؤثر استفاده می‌کند که در مرحله اول روی داده‌های موجود کار می‌کند و در آینده با ML می‌تواند بهبود یابد:</p>
+
+<div class="code-block"># loyalty/services/smart_reorder.py
+def generate_reorder_suggestions(store_id: int):
+    """تولید پیشنهاد سفارش برای یک فروشگاه بر اساس ۲ هفته اخیر."""
+    today = timezone.now().date()
+    last_14_days = today - timedelta(days=14)
+
+    sales_velocity = (
+        SalesLine.objects
+        .filter(sale__store_id=store_id, sale__sale_date__gte=last_14_days)
+        .values('product_id')
+        .annotate(daily_rate=Sum('qty') / 14.0)
+    )
+
+    suggestions = []
+    for item in sales_velocity:
+        product_id = item['product_id']
+        daily_rate = item['daily_rate']
+        if daily_rate &lt;= 0:
+            continue
+        current_stock = (
+            InventoryLot.objects
+            .filter(product_id=product_id,
+                    warehouse__store_id=store_id,
+                    current_qty__gt=0)
+            .aggregate(total=Sum('current_qty'))['total'] or 0
+        )
+        dos = current_stock / daily_rate if daily_rate > 0 else 999
+        if dos &lt; 3:
+            suggested_qty = max(int(daily_rate * 7), 10)
+            store = Store.objects.get(id=store_id)
+            if not check_credit_limit(store, suggested_qty * product.default_price):
+                suggested_qty = adjust_to_credit_limit(store, suggested_qty)
+            suggestions.append(ReorderSuggestion(
+                store_id=store_id, product_id=product_id,
+                suggested_qty=suggested_qty, daily_rate=daily_rate,
+                current_stock=current_stock, days_of_stock=dos,
+                confidence_score=calculate_confidence(daily_rate, dos),
+            ))
+    return sorted(suggestions, key=lambda x: x.days_of_stock)</div>
+
+<h2 class="subsection-title">۱۱.۳ گزارش جغرافیایی Heatmap</h2>
+<p>گزارش جغرافیایی به مدیر امکان می‌دهد توزیع فروش را روی نقشه ایران به‌صورت بصری مشاهده کند. هر فروشگاه با مختصات GPS در جدول <code>Stores</code> ذخیره شده و حجم فروش هر فروشگاه در ماه جاری به رنگ هر نقطه تبدیل می‌شود. رنگ از سبز (کم‌فروش) تا قرمز (پرفروش) متغیر است. این دید بصری به مدیر کمک می‌کند مناطق با پتانسیل رشد را شناسایی کند و منابع عامل پخش را بهینه تخصیص دهد.</p>
+
+<p>پیاده‌سازی با استفاده از کتابخانه <code>react-leaflet</code> در فرانت‌اند و یک API اختصاصی در بک‌اند انجام می‌شود. API فروش‌های تجمیعی ماهانه را بر اساس فروشگاه برمی‌گرداند. برای عملکرد بالا، نتیجه کوئری به‌صورت ۱۵ دقیقه‌ای در Redis کش می‌شود. این گزارش در داشبورد مدیر در فاز ۷ پیاده‌سازی خواهد شد.</p>
+
+<!-- ============ SECTION 12: Saman Tax + Loyalty ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 12</div>
+    <div class="section-title">صورت‌حساب الکترونیکی سامان + وفاداری فروشگاه‌ها</div>
+    <div class="section-subtitle">یکپارچگی با سامانه مالیاتی و برنامه امتیاز پویا</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۲.۱ صورت‌حساب الکترونیکی (سامان)</h2>
+<p>از سال ۱۴۰۳، تمام کسب‌وکارهای ایرانی موظف به ارسال صورت‌حساب الکترونیکی به سامانه پایانه‌های مالیاتی (سامان) هستند. این سرویس برای تمام فروش‌های قطعی (Firm Sale) که در آن مالکیت به فروشگاه منتقل می‌شود، باید فعال باشد. فروش‌های امانی (Consignment) تا زمان فروش نهایی به مصرف‌کننده نیازی به صورت‌حساب ندارند.</p>
+
+<p>یکپارچگی با سامان از طریق REST API رسمی انجام می‌شود. هر فروش قطعی پس از commit، به‌صورت خودکار در جدول <code>TaxInvoices</code> یک رکورد می‌سازد با status=draft، سپس با API سامان به‌عنوان یک پیش‌نویس ارسال می‌شود، UID دریافت و در دیتابیس ذخیره می‌گردد. در صورت تأیید سامان، status به confirmed تغییر می‌کند. در صورت نیاز به اصلاح، با ارسال یک رکورد جدید با نوع اصلاحیه انجام می‌شود.</p>
+
+<div class="callout callout-warning">
+    <div class="callout-title">تأخیر احتمالی سامان</div>
+    <p class="callout-body">سامان ممکن است در زمان ارسال با تأخیر یا خطا پاسخ دهد. در این حالت، یک Celery Task تلاش مجدد با Exponential Backoff انجام می‌دهد. اگر پس از ۵ تلاش ناموفق باشد، به مدیر اطلاع داده می‌شود تا به‌صورت دستی ارسال شود. فروش در دیتابیس قبلاً commit شده و صورتحساب سامان جداگانه ثبت می‌گردد.</p>
+</div>
+
+<h2 class="subsection-title">۱۲.۲ برنامه وفاداری فروشگاه‌ها</h2>
+<p>هر فروشگاه بر اساس رفتار خود (حجم خرید، به موقع پرداخت، عدم برگشت) امتیاز پویا جمع می‌کند. این امتیاز در سه لایه (Tier) دسته‌بندی می‌شود که هر کدام تخفیف یا مزیت متفاوتی دارند. این الگو انگیزه رفتار بهتر فروشگاه‌ها را افزایش می‌دهد و در عین حال به کسب‌وکار اجازه می‌دهد تخفیف‌های استراتژیک به فروشگاه‌های ارزشمند بدهد.</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 14%;">Tier</th>
+    <th style="width: 18%;">امتیاز لازم</th>
+    <th style="width: 30%;">مزیت</th>
+    <th style="width: 38%;">شرط کسب</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><strong>Silver</strong></td>
+    <td>۱۰۰+ امتیاز</td>
+    <td>تخفیف ۲٪ روی تمام سفارش‌ها، اولویت در تحویل</td>
+    <td>خرید ماهانه &gt; ۵۰ میلیون، عدم تأخیر در پرداخت &gt; ۳۰ روز</td>
+</tr>
+<tr>
+    <td><strong>Gold</strong></td>
+    <td>۵۰۰+ امتیاز</td>
+    <td>تخفیف ۵٪، اولویت در سفارش‌های پرفروش، Push Notification ویژه</td>
+    <td>خرید ماهانه &gt; ۲۰۰ میلیون، عدم تأخیر &gt; ۱۵ روز، نرخ برگشت &lt; ۵٪</td>
+</tr>
+<tr>
+    <td><strong>Platinum</strong></td>
+    <td>۱۰۰۰+ امتیاز</td>
+    <td>تخفیف ۸٪، اعتبار افزایش ۵۰٪، دسترسی به محصولات ویژه</td>
+    <td>خرید ماهانه &gt; ۵۰۰ میلیون، عدم تأخیر &gt; ۷ روز، نرخ برگشت &lt; ۲٪</td>
+</tr>
+</tbody>
+</table>
+
+<p>محاسبه امتیاز هر ماه به‌صورت خودکار توسط یک Celery Task شبانه انجام می‌شود. هر تراکنش (خرید، پرداخت به موقع، عدم برگشت) به امتیاز اضافه و در جدول <code>LoyaltyTransaction</code> ذخیره می‌شود. ارتقاء یا تنزل Tier به‌صورت خودکار اتفاق می‌افتد و فروشگاه با Push Notification آگاه می‌شود.</p>
+
+<!-- ============ SECTION 13: Push Notifications ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 13</div>
+    <div class="section-title">Push Notification و یکپارچگی Firebase</div>
+    <div class="section-subtitle">ارسال اعلان موبایل رایگان و سریع به عوامل و فروشگاه‌ها</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۳.۱ چرا Firebase Cloud Messaging؟</h2>
+<p>پیامک از پروایدرهای ایرانی هزینه‌بر است (هر پیامک حدود ۳۰۰ ریال) و در حجم بالا (مثلاً ۵۰ هزار پیام در ماه) هزینه قابل توجهی می‌شود. Firebase Cloud Messaging (FCM) رایگان است و Push Notification را به اپ‌های Android و iOS می‌فرستد. برای اپ Native (React Native) که در فاز ۵ توسعه می‌یابد، FCM بهترین انتخاب است. برای PWA فروشگاه‌ها از Web Push API استفاده می‌شود که FCM هم از آن پشتیبانی می‌کند.</p>
+
+<p>این روش دو مزیت اصلی دارد: (۱) هزینه‌های پیامک کاهش ۷۰-۸۰٪ می‌یابد زیرا اکثر اعلان‌ها از طریق Push ارسال می‌شوند؛ (۲) Push Notification می‌تواند تصویر، دکمه‌های اکشن و لینک به صفحه خاص داشته باشد که پیامک متنی نمی‌تواند. برای اعلان‌های بحرانی (مثلاً یادآوری سرکشی عامل که اگر جا بیافتد ضرر بزرگی دارد)، هم Push و هم SMS به‌صورت موازی ارسال می‌شوند تا اطمینان از دریافت ۱۰۰٪ باشد.</p>
+
+<h2 class="subsection-title">۱۳.۲ سناریوهای Push Notification</h2>
+<p>جدول زیر سناریوهای اصلی Push Notification و قالب هر کدام را نشان می‌دهد. هر قالب در جدول <code>PushTemplates</code> ذخیره و قابل ویرایش از طریق Admin Django است:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 22%;">سناریو</th>
+    <th style="width: 14%;">دریافت‌کننده</th>
+    <th style="width: 64%;">متن و دکمه اکشن</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>یادآوری سرکشی</td>
+    <td>عامل</td>
+    <td>«{{distributor_name}}، شروع سرکشی ساعت {{start_time}}. اولین فروشگاه: {{first_store}}.» + دکمه «شروع»</td>
+</tr>
+<tr>
+    <td>تأیید سفارش</td>
+    <td>فروشگاه</td>
+    <td>«سفارش {{order_no}} شما تأیید شد. تحویل فردا.» + دکمه «مشاهده»</td>
+</tr>
+<tr>
+    <td>رد پیش‌نویس</td>
+    <td>عامل</td>
+    <td>«پیش‌نویس {{draft_no}} رد شد. دلیل: {{reason}}.» + دکمه «اصلاح»</td>
+</tr>
+<tr>
+    <td>تأیید پرداخت</td>
+    <td>فروشگاه</td>
+    <td>«پرداخت {{amount}} ریال دریافت شد. کد پیگیری: {{ref_id}}.» + دکمه «رسید»</td>
+</tr>
+<tr>
+    <td>ارتقاء Tier</td>
+    <td>فروشگاه</td>
+    <td>«تبریک! شما به Tier {{tier_name}} ارتقا یافتید. تخفیف {{discount}}٪ از همین سفارش فعال است.» + دکمه «سفارش جدید»</td>
+</tr>
+<tr>
+    <td>هشدار انقضای کالا</td>
+    <td>مدیر</td>
+    <td>«{{count}} لات نزدیک به انقضا. اولویت: {{highest}}.» + دکمه «داشبورد»</td>
+</tr>
+<tr>
+    <td>خطای توازن سند</td>
+    <td>حسابدار</td>
+    <td>«سند {{journal_no}} نامتوازن است. اختلاف: {{diff}}.» + دکمه «بررسی»</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۱۳.۳ پیاده‌سازی FCM در بک‌اند</h2>
+<p>سرویس Push در بک‌اند با Firebase Admin SDK پیاده‌سازی می‌شود. هر کاربر هنگام ورود به اپ، توکن FCM خود را در جدول <code>UserProfiles.fcm_token</code> ذخیره می‌کند. وقتی سیستمی می‌خواهد Push بفرستد، توکن کاربر را می‌خواند و با SDK به Firebase می‌فرستد. Firebase خودش به دستگاه کاربر تحویل می‌دهد. در صورت خطا (مثلاً توکن منقضی شده)، سیستم توکن را از دیتابیس حذف می‌کند تا حجم دیتابیس کنترل شود.</p>
+
+<div class="code-block"># notifications/services/push_service.py
+from firebase_admin import messaging, initialize_app
+import firebase_admin
+
+firebase_admin.initialize_app()
+
+class PushService:
+    def send_to_user(self, user_id, title, body, data=None):
+        """ارسال Push به یک کاربر."""
+        profile = UserProfile.objects.get(user_id=user_id)
+        if not profile.fcm_token:
+            return False
+        message = messaging.Message(
+            notification=messaging.Notification(title=title, body=body),
+            data=data or {},
+            token=profile.fcm_token,
+            android=messaging.AndroidConfig(priority='high'),
+            apns=messaging.APNSConfig(
+                payload=messaging.APNSPayload(
+                    aps=messaging.Aps(badge=1, sound='default'))),
+        )
+        try:
+            messaging.send(message)
+            return True
+        except messaging.UnregisteredError:
+            profile.fcm_token = None
+            profile.save()
+            return False
+        except Exception as e:
+            logger.error(f"FCM send failed: {e}")
+            return False</div>
+
+<div class="callout">
+    <div class="callout-title">استراتژی دوگانه Push + SMS</div>
+    <p class="callout-body">برای اعلان‌های بحرانی (یادآوری سرکشی، خطای توازن، رد سفارش)، هر دو روش Push و SMS به‌صورت موازی ارسال می‌شوند. این تضمین می‌کند حتی اگر گوشی کاربر خاموش یا بدون اینترنت باشد، پیامک دریافت شود. برای اعلان‌های غیر بحرانی (مثلاً اطلاع از ارتقاء Tier)، فقط Push ارسال می‌شود تا هزینه کاهش یابد.</p>
+</div>
+
+
+<!-- ============ SECTION 14: FEFO Transfer Suggester ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 14</div>
+    <div class="section-title">سیستم هشدار انتقال کالا (FEFO Transfer Suggester)</div>
+    <div class="section-subtitle">شناسایی و انتقال کالاهای نزدیک به انقضا از فروشگاه‌های کم‌فروش به پرفروش</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۴.۱ مسئله و راه‌حل</h2>
+<p>یکی از منابع بزرگ ضایعات در صنعت تولید، کالاهایی است که در فروشگاه‌های کم‌فروش باقی می‌مانند تا منقضی شوند، در حالی که همان محصول در فروشگاه‌های پرفروش نایاب می‌شود. این مشکل به دلیل نامتوازنی بین توزیع و تقاضای واقعی رخ می‌دهد. سیستم هشدار انتقال کالا با تحلیل روزانه داده‌های فروش و موجودی، این نامتوازنی‌ها را شناسایی کرده و انتقال کالا از فروشگاه کم‌فروش به پرفروش را پیشنهاد می‌دهد.</p>
+
+<p>الگوریتم پیشنهاد انتقال به‌صورت یک Celery Task شبانه اجرا می‌شود (هر شب ساعت ۲۳:۰۰) و در پایان یک لیست پیشنهادات را در داشبورد مدیر نمایش می‌دهد. هر پیشنهاد شامل محصول، فروشگاه مبدأ (کم‌فروش)، فروشگاه مقصد (پرفروش)، تعداد کالا و لات مشخص است. مدیر پس از بازبینی، می‌تواند پیشنهادها را به تأیید برساند تا سند انتقال خودکار تولید شود.</p>
+
+<h2 class="subsection-title">۱۴.۲ شاخص‌ها و الگوریتم</h2>
+<p>الگوریتم بر اساس سه شاخص اصلی تصمیم‌گیری می‌کند. این شاخص‌ها به‌گونه‌ای طراحی شده‌اند که هم حساسیت به زمان انقضا و هم عملکرد فروشگاه را در نظر بگیرند، تا از انتقال بی‌مورد جلوگیری شود:</p>
+
+<ul>
+    <li><strong>روزهای باقی‌مانده تا انقضا (DTE):</strong> برای هر لات در هر فروشگاه، تعداد روز تا انقضا. لات‌هایی با DTE &lt; ۵ روز در اولویت انتقال هستند.</li>
+    <li><strong>نرخ فروش روزانه (DSR):</strong> میانگین فروش روزانه این محصول در این فروشگاه در ۷ روز گذشته. این شاخص نشان می‌دهد آیا موجودی فعلی در این فروشگاه به‌اندازه کافی سریع فروخته می‌شود یا خیر.</li>
+    <li><strong>Days of Stock (DOS):</strong> نسبت موجودی فعلی به نرخ فروش روزانه. اگر DOS &gt; DTE، یعنی موجودی فعلی قبل از انقضا به‌طور کامل فروخته نمی‌شود و مازاد وجود دارد.</li>
+</ul>
+
+<div class="code-block"># tasks/transfer_suggester.py
+@shared_task
+def generate_transfer_suggestions():
+    """
+    اجرای شبانه: شناسایی لات‌های نزدیک به انقضا در فروشگاه‌های کم‌فروش.
+    """
+    today = timezone.now().date()
+    
+    # تمام لات‌های فعال در انبارهای مجازی فروشگاه‌ها
+    candidates = InventoryLot.objects.filter(
+        warehouse__type='virtual',
+        current_qty__gt=0,
+        expiry_date__gte=today,
+        expiry_date__lte=today + timedelta(days=7),
+    ).select_related('product', 'warehouse__store')
+    
+    suggestions = []
+    for lot in candidates:
+        # محاسبه نرخ فروش روزانه ۷ روز گذشته
+        dsr = calculate_dsr(lot.product_id, lot.warehouse.store_id, days=7)
+        
+        # Days of Stock
+        dos = lot.current_qty / dsr if dsr > 0 else 999
+        dte = (lot.expiry_date - today).days
+        
+        # شرط پیشنهاد: DOS > DTE (موجودی بیشتر از توان فروش است)
+        if dos > dte:
+            # جستجوی فروشگاه پرفروش نزدیک با موجودی کم
+            dest_store = find_high_demand_store(
+                product_id=lot.product_id,
+                exclude_store_id=lot.warehouse.store_id,
+                max_distance_km=50,
+            )
+            if dest_store:
+                # محاسبه تعداد قابل انتقال
+                qty_to_transfer = min(
+                    lot.current_qty - (dsr * dte),  # مازاد بر نیاز فروشگاه فعلی
+                    dest_store.daily_demand(lot.product_id) * 3,  # حداکثر ۳ روز نیاز مقصد
+                )
+                if qty_to_transfer > 5:  # حداقل ۵ عدد منطقی است
+                    suggestions.append(TransferSuggestion(
+                        lot_id=lot.id,
+                        from_store_id=lot.warehouse.store_id,
+                        to_store_id=dest_store.id,
+                        qty=qty_to_transfer,
+                        urgency='high' if dte &lt;= 3 else 'medium',
+                        score=calculate_priority_score(dte, dos, qty_to_transfer),
+                    ))
+    
+    # ذخیره پیشنهادات در دیتابیس
+    TransferSuggestion.objects.bulk_create(suggestions)
+    
+    # ارسال پیامک اطلاع به مدیر
+    if suggestions:
+        send_sms(
+            to=settings.MANAGER_PHONE,
+            template='transfer_alert',
+            context={'count': len(suggestions)},
+        )
+    
+    return len(suggestions)</div>
+
+<div class="callout callout-success">
+    <div class="callout-title">مزیت محاسباتی</div>
+    <p class="callout-body">بر اساس تخمین محافظه‌کارانه، اگر این سیستم منجر به کاهش ۱۵٪ ضایعات شود، در مقیاس سالانه با ۳۰ محصول و ۲۰۰ فروشگاه، صرفه‌جویی مالی قابل توجهی ایجاد می‌کند. این یکی از مهم‌ترین ROIهای پروژه است و باید در گزارش‌های مالی فاز ۶ به‌طور کمی اندازه‌گیری شود.</p>
+</div>
+
+<!-- ============ SECTION 15: SMS ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 15</div>
+    <div class="section-title">سیستم پیامکی و یادآوری سرکشی</div>
+    <div class="section-subtitle">زمان‌بندی، قالب‌بندی و ارسال پیامک خودکار به عوامل پخش</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۵.۱ معماری سرویس اعلان</h2>
+<p>سرویس اعلان به‌صورت یک Celery Worker مستقل پیاده‌سازی شده که صف ارسال پیامک را از جدول <code>SmsQueue</code> پردازش می‌کند. این جدول توسط سایر Service‌ها (مانند Sales، Inventory، Transfer) به‌صورت ناهمزمان پر می‌شود. سرویس هر ۳۰ ثانیه صف را پایش می‌کند و پیامک‌های آماده ارسال را به پروایدر (کاوه‌نگار) تحویل می‌دهد.</p>
+
+<p>این جداسازی مزیت مهمی دارد: هیچ Service‌ای مستقیماً با API پیامک درگیر نمی‌شود. اگر پروایدر پیامک قطع شود، صف در دیتابیس رشد می‌کند و پس از بازگشت سرویس، تمام پیامک‌های معوق به‌صورت خودکار ارسال می‌شوند. این تضمین می‌کند که هیچ پیامکی (به‌ویژه یادآوری سرکشی بحرانی) از دست نرود.</p>
+
+<h2 class="subsection-title">۱۵.۲ قالب‌های پیامک و یادآوری سرکشی</h2>
+<p>قالب‌های پیامک در جدول <code>SmsTemplate</code> با placeholder‌های Jinja2 ذخیره می‌شوند. این طراحی اجازه می‌دهد قالب‌ها بدون تغییر کد، از طریق Admin Django ویرایش شوند. جدول زیر قالب‌های اصلی مورد نیاز را نشان می‌دهد:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 18%;">نام قالب</th>
+    <th style="width: 14%;">دریافت‌کننده</th>
+    <th style="width: 68%;">متن (با Placeholder)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><code>visit_reminder</code></td>
+    <td>عامل پخش</td>
+    <td>«{{distributor_name}} عزیز، یادآوری سرکشی روز {{date}}: {{store_count}} فروشگاه. اولین فروشگاه: {{first_store}} ساعت {{first_time}}. لطفاً به موقع حاضر شوید.»</td>
+</tr>
+<tr>
+    <td><code>sale_confirmation</code></td>
+    <td>فروشگاه</td>
+    <td>«{{store_name}}، فروش به مبلغ {{total_amount}} ریال با شماره {{sale_no}} ثبت شد. اقلام: {{items_summary}}.»</td>
+</tr>
+<tr>
+    <td><code>expiry_alert</code></td>
+    <td>مدیر</td>
+    <td>«هشدار: {{count}} لات نزدیک به انقضا. اولویت: {{highest_priority_lot}}. وارد داشبورد شوید.»</td>
+</tr>
+<tr>
+    <td><code>transfer_request</code></td>
+    <td>فروشگاه مقصد</td>
+    <td>«{{from_store}} درخواست انتقال {{qty}} عدد {{product}} کرده. کد انتقال: {{transfer_no}}. لطفاً تأیید کنید.»</td>
+</tr>
+<tr>
+    <td><code>low_stock</code></td>
+    <td>انباردار</td>
+    <td>«موجودی {{product}} در {{warehouse}} به {{qty}} رسید (زیر حداقل {{min_qty}}).»</td>
+</tr>
+<tr>
+    <td><code>journal_error</code></td>
+    <td>حسابدار</td>
+    <td>«خطای توازن سند {{journal_no}}: {{diff_amount}} ریال. لطفاً بررسی کنید.»</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۱۵.۳ یکپارچگی با کاوه‌نگار</h2>
+<p>پروایدر کاوه‌نگار به‌دلیل پوشش گسترده و پایداری بالا در ایران انتخاب شده است. این سرویس یک REST API ساده با احراز هویت API Key ارائه می‌دهد. کد زیر نمایش پیاده‌سازی کلاینت آن است که از طریق یک Provider Abstraction در <code>SMSProviderInterface</code> کپسوله شده تا در صورت نیاز به تعویض پروایدر (به فراپیامک)، تنها یک کلاس تغییر کند:</p>
+
+<div class="code-block"># notifications/providers/kavenegar.py
+import requests
+from django.conf import settings
+from .base import SMSProviderInterface
+
+class KavenegarProvider(SMSProviderInterface):
+    API_URL = "https://api.kavenegar.com/v1/{key}/verify/lookup.json"
+    
+    def send(self, to: str, template: str, params: dict) -> dict:
+        url = self.API_URL.format(key=settings.KAVENEGAR_API_KEY)
+        response = requests.post(url, data={
+            'receptor': to,
+            'token': params.get('token', ''),
+            'token2': params.get('token2', ''),
+            'token3': params.get('token3', ''),
+            'template': template,
+        }, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    
+    def send_batch(self, messages: list) -> list:
+        """ارسال گروهی برای کاهش هزینه."""
+        # کاوه‌نگار از ارسال گروهی پشتیبانی می‌کند
+        results = []
+        for msg in messages:
+            try:
+                result = self.send(msg['to'], msg['template'], msg['params'])
+                results.append({'status': 'success', 'msg_id': result['messageid']})
+            except Exception as e:
+                results.append({'status': 'failed', 'error': str(e)})
+                # Retry در صف با Exponential Backoff
+                schedule_retry(msg, attempt=1)
+        return results</div>
+
+<div class="callout">
+    <div class="callout-title">استراتژی Retry</div>
+    <p class="callout-body">در صورت خطای ارسال (شبکه، سرویس‌ناپذیر)، پیامک با Exponential Backoff تلاش مجدد می‌کند: ۱ دقیقه، ۵ دقیقه، ۱۵ دقیقه، ۱ ساعت. پس از ۴ تلاش ناموفق، پیامک به‌عنوان «Failed» علامت‌گذاری و به مدیر اطلاع داده می‌شود.</p>
+</div>
+
+<!-- ============ SECTION 16: Frontend ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 16</div>
+    <div class="section-title">فرانت‌اند و تجربه کاربری (RTL + شمسی)</div>
+    <div class="section-subtitle">Next.js + TypeScript + Tailwind RTL + تقویم جلالی</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۶.۱ استک فرانت‌اند</h2>
+<p>فرانت‌اند با Next.js 14 (App Router) و TypeScript توسعه داده می‌شود. انتخاب Next.js به دلیل سه مزیت اصلی است: (۱) پشتیبانی SSR برای بهبود LCP در صفحات کلیدی مثل داشبورد و گزارش‌ها، (۲) PWA برای دسترسی آفلاین عوامل پخش در مناطق با اینترنت ناپایدار، و (۳) Code Splitting خودکار برای کاهش bundle size.</p>
+
+<p>Tailwind CSS با RTL Plugin برای استایل‌بندی انتخاب شده زیرا این پکیج با ابزار <code>tailwindcss-rtl</code> به‌طور خودکار direction-aware utility classes تولید می‌کند. برای مثال، <code>pl-4</code> در حالت RTL به‌طور خودکار به padding-right تبدیل می‌شود. این مزیت توسعه سریع بدون نیاز به نوشتن CSS سفارشی را فراهم می‌کند.</p>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-value">۹۰+</div>
+        <div class="stat-label">هدف Lighthouse</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">۱۵۰ms</div>
+        <div class="stat-label">FCP هدف</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">PWA</div>
+        <div class="stat-label">دسترسی آفلاین</div>
+    </div>
+</div>
+
+<h2 class="subsection-title">۱۶.۲ فونت و RTL</h2>
+<p>فونت Vazirmatn به‌عنوان فونت اصلی فارسی انتخاب شده است. این فونت به‌دلیل وزن‌های کامل (۳۰۰ تا ۹۰۰)، پشتیبانی از اعداد فارسی و قالب‌بندی صحیح کاراکترهای RTL، بهترین انتخاب برای پروژه‌های مدرن فارسی است. فونت از Google Fonts CDN بارگذاری می‌شود با <code>font-display: swap</code> برای جلوگیری از FOIT (Flash of Invisible Text).</p>
+
+<p>تمام صفحات با <code>dir="rtl"</code> و <code>lang="fa"</code> در تگ html شروع می‌شوند. تقویم جلالی با کتابخانه <code>jalaali-js</code> برای تبدیل میلادی-شمسی و کامپوننت <code>react-jalaali-datepicker</code> برای رابط کاربری Date Picker استفاده می‌شود. تمام نمایش‌های تاریخ در فرانت‌اند به شمسی تبدیل می‌شوند، در حالی که در بک‌اند و دیتابیس به‌صورت میلادی ذخیره می‌گردند.</p>
+
+<h2 class="subsection-title">۱۶.۳ نقش‌های کاربری و صفحات</h2>
+<p>سیستم چهار نقش کاربری دارد که هر کدام مجموعه‌ای از صفحات اختصاصی دارند. رابط کاربری با الگوی Master-Detail طراحی شده: یک لیست در سمت راست و جزئیات در سمت چپ (در حالت RTL). جدول زیر نقش‌ها و صفحات کلیدی آنها را نشان می‌دهد:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 18%;">نقش</th>
+    <th style="width: 82%;">صفحات کلیدی</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><strong>مدیر</strong></td>
+    <td>داشبورد بلادرنگ، گزارش‌های فروش/ضایعات/سود، تأیید انتقال FEFO، تنظیمات کاربران و نقش‌ها، تنظیم قالب‌های پیامک.</td>
+</tr>
+<tr>
+    <td><strong>حسابدار</strong></td>
+    <td>دفتر روزنامه، تراز آزمایشی، کدینگ حساب‌ها، کنترل توازن روزانه، گزارش سود و زیان، صورت‌های مالی.</td>
+</tr>
+<tr>
+    <td><strong>انباردار</strong></td>
+    <td>ثبت تولید، ورود/خروج کالا، موجودی لحظه‌ای انبارها، درخواست انتقال، گزارش ضایعات.</td>
+</tr>
+<tr>
+    <td><strong>عامل پخش</strong></td>
+    <td>سبد پخش روزانه (با اپ موبایل PWA)، ثبت فروش امانی/قطعی، ثبت برگشت، مشاهده موجودی فروشگاه، ثبت موقعیت GPS سرکشی.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۱۶.۴ اپلیکیشن موبایل PWA برای عوامل</h2>
+<p>عوامل پخش در مسیر حرکت هستند و اغلب در مناطقی با اینترنت ناپایدار کار می‌کنند. برای پشتیبانی از این حالت، یک PWA با Service Worker توسعه داده می‌شود که امکان ثبت فروش آفلاین را فراهم می‌کند. وقتی اینترنت قطع است، فروش‌ها در IndexedDB ذخیره و پس از بازگشت اینترنت، با Celery Beat به‌صورت خودکار با سرور همگام می‌شوند.</p>
+
+<div class="callout callout-warning">
+    <div class="callout-title">تضاد FEFO با حالت آفلاین</div>
+    <p class="callout-body">در حالت آفلاین، عامل نمی‌تواند آخرین وضعیت موجودی را ببیند که ممکن است منجر به ثبت فروش کالای ناموجود شود. راه‌حل: هنگام شروع روز، عامل آخرین وضعیت موجودی هر فروشگاه را در IndexedDB دانلود می‌کند و در طول روز فقط با این snapshot کار می‌کند. وقتی اینترنت بازگشت، اگر اختلافی باشد (مثلاً فروشگاه از منبع دیگری کالا خریده باشد)، خطا به مدیر اطلاع داده می‌شود و عامل باید بازبینی کند.</p>
+</div>
+
+<!-- ============ SECTION 17: Roadmap ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 17</div>
+    <div class="section-title">نقشه راه پروژه (Roadmap)</div>
+    <div class="section-subtitle">هشت فاز ده‌ماهه با تحویل تدریجی MVP و قابلیت‌های موبایل</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۷.۱ اصول Roadmap</h2>
+<p>نقشه راه پروژه بر اساس سه اصل طراحی شده: (۱) هر فاز یک MVP قابل دمو تحویل می‌دهد که به کسب‌وکار اجازه می‌دهد زودتر از موعد نهایی ارزش دریافت کند. (۲) ریسک‌های فنی بزرگ (مثل FEFO و میانگین موزون) در فازهای اولیه قرار گرفته‌اند تا اگر مشکلی پیش بیاید، زمان کافی برای جبران وجود داشته باشد. (۳) قابلیت‌های موبایل (اپ عامل و پورتال فروشگاه) در فازهای ۵ و ۶ به‌عنوان فازهای مستقل قرار گرفته‌اند تا تمرکز تیم روی تجربه کاربری موبایل کامل بشه. این سه اصل احتمال موفقیت پروژه را به‌طور قابل توجهی افزایش می‌دهند.</p>
+
+<h2 class="subsection-title">۱۷.۲ نمودار گانت فازها</h2>
+<p>نمودار گانت زیر نشان‌دهنده تایم‌لاین هشت فاز در ده ماه است. هر فاز بین ۱ تا ۱.۵ ماه طول می‌کشد و در پایان هر فاز یک Demo Day برگزار می‌شود که تیم توسعه و کسب‌وکار نتایج را بازبینی می‌کنند. پس از فاز ۴، یک Soft Launch به ۱۰٪ فروشگاه‌ها انجام می‌شود و در فاز ۸ Rollout کامل رخ می‌دهد. دو فاز جدید (۵ و ۶) نسبت به نسخه ۱.۰ برای موبایل عامل و پورتال فروشگاه اضافه شده‌اند.</p>
+
+<table class="gantt">
+<thead>
+<tr>
+    <th style="width: 18%;">فاز</th>
+    <th style="width: 8.2%;">ماه ۱</th>
+    <th style="width: 8.2%;">ماه ۲</th>
+    <th style="width: 8.2%;">ماه ۳</th>
+    <th style="width: 8.2%;">ماه ۴</th>
+    <th style="width: 8.2%;">ماه ۵</th>
+    <th style="width: 8.2%;">ماه ۶</th>
+    <th style="width: 8.2%;">ماه ۷</th>
+    <th style="width: 8.2%;">ماه ۸</th>
+    <th style="width: 8.2%;">ماه ۹</th>
+    <th style="width: 8.2%;">ماه ۱۰</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td class="phase-name">فاز ۱: بن‌بست و مدل پایه</td>
+    <td class="bar-1"></td><td class="bar-1"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+    <td class="phase-name">فاز ۲: تولید و انبار</td>
+    <td></td><td></td><td class="bar-2"></td><td class="bar-2"></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+    <td class="phase-name">فاز ۳: فروش و پخش</td>
+    <td></td><td></td><td></td><td></td><td class="bar-3"></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+    <td class="phase-name">فاز ۴: حسابداری و گزارش</td>
+    <td></td><td></td><td></td><td></td><td></td><td class="bar-4"></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+    <td class="phase-name">فاز ۵: موبایل عامل (React Native)</td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td class="bar-5"></td><td class="bar-5"></td><td></td><td></td>
+</tr>
+<tr>
+    <td class="phase-name">فاز ۶: پورتال فروشگاه (PWA)</td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bar-6"></td><td></td><td></td>
+</tr>
+<tr>
+    <td class="phase-name">فاز ۷: بارکد/QR + Smart Reorder</td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bar-1"></td><td></td>
+</tr>
+<tr>
+    <td class="phase-name">فاز ۸: تست، بهینه‌سازی و Rollout</td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bar-2"></td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۱۷.۳ جزئیات فازها</h2>
+<p>هر فاز شامل مجموعه‌ای از قابلیت‌هاست که باید به‌طور کامل پیاده‌سازی شوند تا فاز قابل دمو باشد. جدول زیر قابلیت‌های کلیدی هر فاز را نشان می‌دهد. دو فاز جدید (۵ و ۶) برای موبایل عامل و پورتال فروشگاه اضافه شده‌اند:</p>
+
+<table class="long-table">
+<thead>
+<tr>
+    <th style="width: 6%;">فاز</th>
+    <th style="width: 14%;">مدت</th>
+    <th style="width: 50%;">قابلیت‌های کلیدی</th>
+    <th style="width: 30%;">Deliverable فاز</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>۱</td>
+    <td>۲ ماه</td>
+    <td>راه‌اندازی زیرساخت (Docker، CI/CD)، پیاده‌سازی ۱۷ App پایه با Migration، احراز هویت JWT، RBAC با ۵ نقش، ادمین Django سفارشی، تعریف اولیه ۳۰ محصول با تصاویر.</td>
+    <td>MVP با امکان ثبت کاربر، ورود، تعریف محصول، نمایش لیست انبارها.</td>
+</tr>
+<tr>
+    <td>۲</td>
+    <td>۲ ماه</td>
+    <td>پیاده‌سازی کامل Inventory Service با FEFO، Production Service با میانگین موزون، PostgreSQL Triggers، APIهای REST، اولین گزارش‌های موجودی.</td>
+    <td>MVP با امکان ثبت بچ تولید، مشاهده لات‌ها، ثبت حرکت انبار.</td>
+</tr>
+<tr>
+    <td>۳</td>
+    <td>۱.۵ ماه</td>
+    <td>Sales Service (امانی/قطعی)، Dispatch Service، Return Service، فرانت‌اند Next.js با صفحات فروش و پخش.</td>
+    <td>MVP با امکان ثبت کامل چرخه فروش امانی و قطعی (بدون موبایل عامل).</td>
+</tr>
+<tr>
+    <td>۴</td>
+    <td>۱ ماه</td>
+    <td>Accounting Service با JournalTemplates، Django Signals برای Auto-Journal، گزارش‌های مالی پایه، داشبورد مدیر.</td>
+    <td>MVP با یکپارچگی کامل انبار-حسابداری. Soft Launch به ۲۰ فروشگاه.</td>
+</tr>
+<tr>
+    <td>۵</td>
+    <td>۱.۵ ماه</td>
+    <td>اپ موبایل React Native برای عوامل با بارکدخوان نیتیو، حالت آفلاین با SQLite، جریان ۴ مرحله‌ای تأیید (Draft → Manager → Posted)، Push Notification، Firebase Cloud Messaging.</td>
+    <td>اپ موبایل عامل فعال با امکان ثبت پیش‌نویس فروش و آفلاین.</td>
+</tr>
+<tr>
+    <td>۶</td>
+    <td>۱ ماه</td>
+    <td>پورتال PWA برای فروشگاه‌ها با سفارش آنلاین، کاتالوگ تصویری، پرداخت از طریق ۳ درگاه (زرین‌پال/آیدی‌پی/پارسیان)، گزارش‌گیری خودخدمتی، یکپارچگی با سامان.</td>
+    <td>پورتال فروشگاه فعال با قابلیت سفارش و پرداخت آنلاین.</td>
+</tr>
+<tr>
+    <td>۷</td>
+    <td>۱ ماه</td>
+    <td>تولید بارکد و QR Code برای محصولات/لات/سفارش، الگوریتم Smart Reorder، گزارش جغرافیایی Heatmap، Loyalty Program با ۳ Tier، Firebase Push Notification.</td>
+    <td>قابلیت‌های هوشمند و وفاداری فعال. Rollout به ۱۰۰ فروشگاه.</td>
+</tr>
+<tr>
+    <td>۸</td>
+    <td>۰.۵ ماه</td>
+    <td>تست بار (Locust)، بهینه‌سازی کوئری‌ها، Sentry و Grafana، بکاپ روزانه، مستندات کاربران، آموزش تیم کسب‌وکار، انتشار اپ در Google Play و App Store.</td>
+    <td>نسخه ۲.۰ نهایی، آماده Rollout کامل به ۲۰۰ فروشگاه.</td>
+</tr>
+</tbody>
+</table>
+
+<!-- ============ SECTION 18: Testing & DevOps ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 18</div>
+    <div class="section-title">استراتژی تست و DevOps</div>
+    <div class="section-subtitle">CI/CD، تست‌های خودکار، مانیتورینگ و بکاپ</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۸.۱ هرم تست‌ها</h2>
+<p>سیستم تست بر اساس هرم کلاسیک تست نرم‌افزار طراحی شده که شامل سه لایه است. این هرم تضمین می‌کند که ۸۰٪ کد با تست‌های سریاع واحد پوشش داده شود، ۱۵٪ با تست‌های یکپارچگی برای بررسی تعامل بین Service‌ها، و ۵٪ با تست‌های End-to-End برای سناریوهای کلیدی کسب‌وکار. این ترکیب سرعت توسعه و اطمینان از صحت عملکرد را هم‌زمان تأمین می‌کند:</p>
+
+<ul>
+    <li><strong>Unit Tests (۸۰٪):</strong> تست هر تابع Service به‌صورت مستقل با mocking پایگاه داده. ابزار: pytest + factory_boy + pytest-django. هدف P95 زیر ۳۰ ثانیه برای کل suite.</li>
+    <li><strong>Integration Tests (۱۵٪):</strong> تست تعامل چند Service با دیتابیس واقعی (PostgreSQL در Docker). ابزار: pytest-django + testfixtures. این لایه به‌طور خاص FEFO و میانگین موزون را با داده‌های واقعی تست می‌کند.</li>
+    <li><strong>E2E Tests (۵٪):</strong> تست سناریوهای کامل کسب‌وکار از طریق API. ابزار: pytest + requests. سناریوها: ثبت تولید → پخش → فروش امانی → تسویه روزانه → کنترل توازن حسابداری.</li>
+</ul>
+
+<h2 class="subsection-title">۱۸.۲ CI/CD با GitHub Actions</h2>
+<p>یک Pipeline کامل CI/CD با GitHub Actions پیاده‌سازی می‌شود که در هر Push یا Pull Request به‌طور خودکار اجرا می‌شود. این Pipeline شامل چهار stage است که به ترتیب اجرا می‌شوند. اگر هر stage ناموفق باشد، Pipeline متوقف و به تیم اطلاع داده می‌شود. این تضمین می‌کند که هیچ کد نامعتبری به شاخه اصلی ادغام نشود:</p>
+
+<div class="code-block"># .github/workflows/ci.yml
+name: CI/CD Pipeline
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install black flake8 mypy pylint
+      - run: black --check .
+      - run: flake8 .
+      - run: mypy --strict backend/
+      - run: pylint --fail-under=8 backend/
+  
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: test
+        ports: ['5432:5432']
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -r requirements.txt
+      - run: pytest --cov=backend --cov-report=xml --cov-fail-under=80
+  
+  security:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - run: pip install bandit safety
+      - run: bandit -r backend/ -ll
+      - run: safety check
+  
+  deploy-staging:
+    needs: [lint, test, security]
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - run: docker build -t registry/bakery:${{ github.sha }} .
+      - run: docker push registry/bakery:${{ github.sha }}
+      - run: ssh deploy@staging "cd /opt/bakery && docker-compose pull && docker-compose up -d"</div>
+
+<h2 class="subsection-title">۱۸.۳ مانیتورینگ و بکاپ</h2>
+<p>سیستم مانیتورینگ شامل سه لایه است. <strong>Sentry</strong> برای ردیابی خطاهای کد در زمان واقعی (Frontend و Backend) با یکپارچگی کامل با Django و Next.js. <strong>Grafana + Prometheus</strong> برای Metrics زیرساختی شامل CPU، RAM، Disk I/O، تعداد درخواست‌ها، Response Time توزیع‌شده، و تعداد تراکنش‌های DB. <strong>Loki + Promtail</strong> برای تجمیع لاگ‌های Application.</p>
+
+<p>بکاپ روزانه پایگاه داده با pg_dump انجام می‌شود و فایل‌های بکاپ به یک Object Storage (MinIO یا S3) منتقل می‌شوند. سیاست Retention شامل نگه‌داری ۷ بکاپ روزانه، ۴ هفتگی، و ۱۲ ماهانه است که مجموعاً ۲۳ بکاپ را در هر لحظه نگه‌داری می‌کند. علاوه بر این، یک Replication Stream به سرور Standby در دیتاسنتر دوم برای Disaster Recovery فعال است که RPO را به زیر ۵ دقیقه می‌رساند.</p>
+
+<div class="callout">
+    <div class="callout-title">Health Check آسان</div>
+    <p class="callout-body">یک endpoint ساده <code>/api/health/</code> شامل وضعیت تمام وابستگی‌ها (DB، Redis، RabbitMQ، Celery) را برمی‌گرداند. این endpoint توسط UptimeRobot هر ۱ دقیقه پایش می‌شود و در صورت قطعی، تیم Ops در عرض ۵ دقیقه از طریق تلگرام آگاه می‌شود.</p>
+</div>
+
+<!-- ============ SECTION 19: Risk Analysis ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 19</div>
+    <div class="section-title">تحلیل ریسک و استراتژی کاهش</div>
+    <div class="section-subtitle">شناسایی، اولویت‌بندی و راهکار مدیریت ریسک‌های پروژه</div>
+    <div class="divider"></div>
+</div>
+
+<h2 class="subsection-title">۱۹.۱ متدولوژی تحلیل ریسک</h2>
+<p>تحلیل ریسک بر اساس ماتریس متداول احتمال × اثر انجام شده است. هر ریسک بر اساس دو محور احتمال وقوع (۱-۵) و شدت اثر (۱-۵) ارزیابی می‌شود. امتیاز نهایی (ضرب دو محور) تعیین‌کننده اولویت توجه است: امتیاز بالای ۱۵ به‌عنوان بحرانی، ۱۰-۱۵ به‌عنوان بالا، ۵-۹ به‌عنوان متوسط، و زیر ۵ به‌عنوان پذیرفته‌شده در نظر گرفته می‌شود. این متدولوژی به تیم اجازه می‌دهد منابع را بر اساس اولویت واقعی تخصیص دهد.</p>
+
+<h2 class="subsection-title">۱۹.۲ جدول ریسک‌های اصلی</h2>
+<p>پس از بررسی کامل پروژه، پنج ریسک اصلی شناسایی شده‌اند. برای هر ریسک، راهکار کاهش مشخص و اقدام واکنشی در صورت وقوع تعریف شده است. این جدول باید در طول پروژه توسط Project Manager به‌روزرسانی شود و در پایان هر فاز بازبینی گردد:</p>
+
+<table class="long-table">
+<thead>
+<tr>
+    <th style="width: 5%;">#</th>
+    <th style="width: 25%;">ریسک</th>
+    <th style="width: 10%;">احتمال</th>
+    <th style="width: 10%;">اثر</th>
+    <th style="width: 8%;">امتیاز</th>
+    <th style="width: 22%;">راهکار کاهش (Mitigation)</th>
+    <th style="width: 20%;">اقدام واکنشی (Contingency)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>۱</td>
+    <td>پیچیدگی FEFO و میانگین موزون در حجم بالا</td>
+    <td><span class="risk-badge risk-medium">۳</span></td>
+    <td><span class="risk-badge risk-high">۵</span></td>
+    <td><span class="risk-badge risk-high">۱۵</span></td>
+    <td>پیاده‌سازی PostgreSQL Functions با Row-Level Locking. تست بار زودهنگام در فاز ۲.</td>
+    <td>مهاجرت به Celery Task ناهمزمان برای محاسبات سنگین. ارتقاء به PostgreSQL Partitioning.</td>
+</tr>
+<tr>
+    <td>۲</td>
+    <td>عدم تطابق داده‌های قدیمی با ساختار جدید</td>
+    <td><span class="risk-badge risk-high">۴</span></td>
+    <td><span class="risk-badge risk-medium">۳</span></td>
+    <td><span class="risk-badge risk-high">۱۲</span></td>
+    <td>اسکریپت Migration با Data Validation. اجرای Dry-Run در محیط Staging.</td>
+    <td>ورود دستی داده‌های پایه با تأیید مدیر. نگه‌داری سیستم قدیمی به مدت ۳ ماه موازی.</td>
+</tr>
+<tr>
+    <td>۳</td>
+    <td>تاخیر تیم توسعه در فازهای حساس</td>
+    <td><span class="risk-badge risk-medium">۳</span></td>
+    <td><span class="risk-badge risk-medium">۴</span></td>
+    <td><span class="risk-badge risk-high">۱۲</span></td>
+    <td>تعریف Milestone هفتگی با Demo. اگر فاز ۲ به تأخیر بیفتد، فاز ۶ حذف می‌شود و ۵ گسترش می‌یابد.</td>
+    <td>استفاده از منابع Outsource برای ۲ هفته بحرانی. کاهش Scope فازهای آخر.</td>
+</tr>
+<tr>
+    <td>۴</td>
+    <td>قطعی سرویس پیامک یا تغییر API</td>
+    <td><span class="risk-badge risk-medium">۳</span></td>
+    <td><span class="risk-badge risk-medium">۳</span></td>
+    <td><span class="risk-badge risk-medium">۹</span></td>
+    <td>پیاده‌سازی SMSProviderInterface برای تعویض سریع. Reserve Provider دوم (فراپیامک).</td>
+    <td>فعال‌سازی فراپیامک در کمتر از ۱۰ دقیقه. اطلاع‌رسانی مدیر از طریق تلگرام.</td>
+</tr>
+<tr>
+    <td>۵</td>
+    <td>مشکلات پایداری در Soft Launch</td>
+    <td><span class="risk-badge risk-medium">۳</span></td>
+    <td><span class="risk-badge risk-high">۴</span></td>
+    <td><span class="risk-badge risk-high">۱۲</span></td>
+    <td>Soft Launch به ۲۰ فروشگاه (نه ۲۰۰). مانیتورینگ شدید با Sentry و Grafana.</td>
+    <td>قابلیت Rollback به نسخه قبلی با Docker. نگه‌داری سیستم قدیمی ۱ ماه موازی.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 class="subsection-title">۱۹.۳ تخمین هزینه</h2>
+<p>تخمین هزینه‌ها بر اساس تجربه بازار ایران در سال ۱۴۰۴ انجام شده است. این ارقام شامل هزینه‌های زیرساخت، تیم توسعه (۵ نفر + توسعه‌دهنده React Native) و لایسنس‌ها برای یک چرخه ۱۰ ماهه پروژه و ۱۲ ماه پشتیبانی پس از تحویل است. تمام ارقام به ریال ایران است. نسبت به نسخه ۱.۰، هزینه‌ها به‌دلیل اضافه شدن موبایل Native و درگاه پرداخت حدود ۳۵٪ افزایش یافته است:</p>
+
+<table>
+<thead>
+<tr>
+    <th style="width: 50%;">عنوان هزینه</th>
+    <th style="width: 25%;">ماهانه</th>
+    <th style="width: 25%;">کل (۲۰ ماه)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>تیم توسعه (۶ نفر × میانگین دستمزد ارشد)</td>
+    <td>۳٬۴۰۰٬۰۰۰٬۰۰۰</td>
+    <td>۷۴٬۸۰۰٬۰۰۰٬۰۰۰</td>
+</tr>
+<tr>
+    <td>VPS اختصاصی (۳۲GB RAM، ۸ Core)</td>
+    <td>۲۰۰٬۰۰۰٬۰۰۰</td>
+    <td>۴٬۴۰۰٬۰۰۰٬۰۰۰</td>
+</tr>
+<tr>
+    <td>Object Storage و Bandwidth (شامل تصاویر محصول)</td>
+    <td>۵۰٬۰۰۰٬۰۰۰</td>
+    <td>۱٬۱۰۰٬۰۰۰٬۰۰۰</td>
+</tr>
+<tr>
+    <td>پروایدر پیامک + Firebase (با کاهش ۷۰٪ به‌واسطه Push)</td>
+    <td>۵۰٬۰۰۰٬۰۰۰</td>
+    <td>۱٬۱۰۰٬۰۰۰٬۰۰۰</td>
+</tr>
+<tr>
+    <td>درگاه پرداخت (کارمزد ۱.۵٪ بر گردش سالانه)</td>
+    <td>۱۵۰٬۰۰۰٬۰۰۰</td>
+    <td>۳٬۳۰۰٬۰۰۰٬۰۰۰</td>
+</tr>
+<tr>
+    <td>دامنه، SSL، Apple Developer + Google Play</td>
+    <td>۲۵٬۰۰۰٬۰۰۰</td>
+    <td>۵۵۰٬۰۰۰٬۰۰۰</td>
+</tr>
+<tr>
+    <td>لایسنس Sentry Pro، Firebase، ابزارهای مانیتورینگ</td>
+    <td>۳۵٬۰۰۰٬۰۰۰</td>
+    <td>۷۷۰٬۰۰۰٬۰۰۰</td>
+</tr>
+<tr>
+    <td><strong>جمع</strong></td>
+    <td><strong>۳٬۹۱۰٬۰۰۰٬۰۰۰</strong></td>
+    <td><strong>~۸۶ میلیارد ریال</strong></td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-success">
+    <div class="callout-title">ROI پروژه (نسخه ۲.۰)</div>
+    <p class="callout-body">اگر سیستم تنها از طریق کاهش ۱۵٪ ضایعات، کاهش ۳۰٪ هزینه‌های عملیاتی پخش، افزایش ۲۰٪ فروش به‌واسطه Smart Reorder و Loyalty Program، و کاهش ۷۰٪ هزینه پیامک به‌واسطه Push Notification عمل کند، بازگشت سرمایه (ROI) در حدود ۱۸-۲۲ ماه پس از Rollout کامل محقق می‌شود. این محاسبه بر اساس حجم فعلی کسب‌وکار (۲۰۰ فروشگاه و ۳۰ محصول) انجام شده. در صورت گسترش به ۵۰۰ فروشگاه، ROI به ۱۴ ماه کاهش می‌یابد.</p>
+</div>
+
+<!-- ============ SECTION 20: Conclusion ============ -->
+<div class="chapter-header">
+    <div class="section-tag">SECTION 20</div>
+    <div class="section-title">جمع‌بندی و گام‌های بعدی</div>
+    <div class="section-subtitle">پایان سند و توصیه‌های اجرایی</div>
+    <div class="divider"></div>
+</div>
+
+<p>این سند معماری نسخه ۲.۰ یک نقشه راه کامل و قابل اجرا برای جایگزینی سیستم شکننده فعلی با یک پلتفرم پایدار، چندکاربره و تحت وب ارائه می‌دهد. طراحی بر اساس تجربه صنعتی و استانداردهای مهندسی نرم‌افزار مدرن انجام شده و تمام الزامات کسب‌وکار (FEFO، میانگین موزون، حسابداری دوطرفه، RTL، تقویم شمسی، چندکاربره) را در یک معماری یکپارچه پوشش می‌دهد. نسخه ۲.۰ با اضافه شدن دو رابط موبایل (اپ Native برای عوامل و PWA برای فروشگاه‌ها)، ۸ قابلیت تکمیلی (مدیریت اعتبار، بارکد/QR، سامان، پرداخت آنلاین، Smart Reorder، Loyalty، Geo Heatmap، Push Notification) و ۸ جدول جدید دیتابیس، پلتفرم را از یک سیستم داخلی به یک بازار تجاری B2B کامل تبدیل می‌کند.</p>
+
+<p>چهار توصیه اجرایی برای موفقیت پروژه ارائه می‌شود. اول، فاز صفر (یک هفته قبل از شروع فاز ۱) را به تأیید نهایی فرضیات، تهیه زیرساخت اولیه و تیم‌سازی اختصاص دهید. دوم، در پایان هر فاز، یک جلسه بازبینی با کسب‌وکار برگزار کنید تا بازخورد زنده دریافت شود و در صورت لزوم Small Scope Adjustments انجام گیرد. سوم، از فاز ۲ به بعد، یک کارشناس حسابداری ارشد کسب‌وکار را به‌عنوان مشاور فنی در فرایند توسعه دخالت دهید تا الزامات مالی به‌درستی پیاده‌سازی شوند. چهارم، پس از تحویل نسخه ۲.۰، یک دوره پشتیبانی ۱۲ ماهه با تیم توسعه برای رفع Bug و اضافه کردن قابلیت‌های کوچک پیش‌بینی کنید. همچنین توصیه می‌شود تیم توسعه به‌محض شروع فاز ۵، فرآیند انتشار اپ در Google Play و App Store را آغاز کند زیرا مرور ممکن است ۱-۲ هفته طول بکشد.</p>
+
+<p>این سند به‌عنوان نقطه شروع کار است و در طول فاز ۱ با جزئیات بیشتر در زمینه API Spec، UI Wireframes و Database Migration Script تکمیل خواهد شد. هرگونه تغییر در فرضیات یا اهداف کسب‌وکار نیازمند بازنگری این سند است و باید از طریق کنترل نسخه مدیریت گردد. با پیاده‌سازی این نقشه راه، کسب‌وکار در پایان ۱۰ ماه یک سیستم نرم‌افزاری پایدار و قابل توسعه خواهد داشت که برای سال‌های آتی نیاز‌های عملیاتی و مالی را پوشش می‌دهد و به‌عنوان یک پلتفرم B2B قابل گسترش به سایر صنایع تولیدی نیز عمل خواهد کرد.</p>
+
+</div>
+
+<!-- ============ ENDING PAGE ============ -->
+<div class="ending">
+    <div class="ending-title">آماده توسعه</div>
+    <div class="ending-divider"></div>
+    <div class="ending-text">این سند نسخه ۲.۰ نقطه شروع پروژه است. در پایان فاز ۱، نسخه ۳.۰ این سند با جزئیات API Spec، UI Wireframes و Migration Script‌ها منتشر خواهد شد. با اضافه شدن موبایل Native و پورتال PWA، پروژه به یک پلتفرم B2B کامل تبدیل می‌شود.</div>
+    <div class="ending-blocks">
+        <div class="ending-block">
+            <div class="ending-block-title">NEXT STEPS</div>
+            <div class="ending-block-list">
+                • تأیید فرضیات با ذی‌نفعان<br>
+                • تشکیل تیم توسعه<br>
+                • تهیه زیرساخت اولیه<br>
+                • شروع فاز ۱ (بن‌بست)
+            </div>
+        </div>
+        <div class="ending-block">
+            <div class="ending-block-title">CONTACT</div>
+            <div class="ending-block-list">
+                معمار سیستم<br>
+                تیم ارشد مهندسی نرم‌افزار<br>
+                نسخه سند: ۲.۰<br>
+                تاریخ: ۱۴۰۴
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
