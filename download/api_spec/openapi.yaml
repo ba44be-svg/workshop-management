@@ -1,0 +1,1489 @@
+openapi: 3.0.3
+info:
+  title: Workshop Management API
+  description: |
+    نرم‌افزار جامع مدیریت تولید و پخش کارگاه‌های تولیدی
+
+    ## نقش‌ها و دسترسی‌ها
+    - **manager**: دسترسی کامل + تأیید/رد اسناد
+    - **accountant**: سند حسابداری + گزارش‌های مالی
+    - **storekeeper**: ثبت تولید و حرکت انبار
+    - **distributor**: ثبت پیش‌نویس فروش + اسکن بارکد (موبایل Native)
+    - **store_owner**: سفارش آنلاین + پرداخت + گزارش (پورتال PWA)
+
+    ## احراز هویت
+    تمام endpointها (به‌جز auth/login) نیاز به JWT دارند:
+    ```
+    Authorization: JWT <access_token>
+    ```
+
+  version: 2.0.0
+  contact:
+    name: تیم ارشد مهندسی نرم‌افزار
+    email: dev@workshop.local
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:8000/api
+    description: Development
+  - url: https://staging.workshop.local/api
+    description: Staging
+  - url: https://api.workshop.local/api
+    description: Production
+
+tags:
+  - name: auth
+    description: احراز هویت و JWT
+  - name: products
+    description: مدیریت محصولات و دسته‌بندی
+  - name: inventory
+    description: انبار، لات‌ها و FEFO
+  - name: production
+    description: تولید و مصرف مواد
+  - name: dispatch
+    description: پخش و بارگیری به عوامل
+  - name: sales
+    description: فروش امانی/قطعی و برگشت
+  - name: transfers
+    description: انتقال بین فروشگاه‌ها
+  - name: partners
+    description: فروشگاه‌ها و عوامل پخش
+  - name: accounting
+    description: حسابداری دوطرفه و اسناد
+  - name: approval
+    description: جریان تأیید مدیر
+  - name: store-portal
+    description: پورتال فروشگاه (B2B)
+  - name: payments
+    description: پرداخت آنلاین (زرین‌پال، آیدی‌پی، پارسیان)
+  - name: notifications
+    description: SMS و Push Notification
+  - name: loyalty
+    description: وفاداری و Smart Reorder
+  - name: barcode
+    description: بارکد و QR Code
+  - name: tax
+    description: صورت‌حساب الکترونیکی سامان
+  - name: mobile
+    description: Endpointهای مخصوص موبایل عامل (React Native)
+  - name: reports
+    description: گزارش‌ها و داشبورد
+
+# ============================================================
+# Security
+# ============================================================
+security:
+  - JWTAuth: []
+
+components:
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  # ============================================================
+  # Schemas - Common
+  # ============================================================
+  schemas:
+
+    # ----- Common -----
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          example: 150
+        page_size:
+          type: integer
+          example: 50
+        current_page:
+          type: integer
+          example: 1
+        total_pages:
+          type: integer
+          example: 3
+        has_next:
+          type: boolean
+          example: true
+        has_previous:
+          type: boolean
+          example: false
+
+    Error:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
+          example: "موجودی کافی نیست"
+        code:
+          type: string
+          example: "insufficient_stock"
+        field_errors:
+          type: object
+
+    # ----- Auth -----
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          example: "admin"
+        password:
+          type: string
+          format: password
+          example: "secret123"
+
+    TokenPair:
+      type: object
+      properties:
+        access:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        refresh:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    # ----- User -----
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "admin"
+        email:
+          type: string
+          format: email
+          example: "admin@workshop.local"
+        role:
+          type: string
+          enum: [manager, accountant, storekeeper, distributor, store_owner]
+          example: "manager"
+        role_display:
+          type: string
+          example: "مدیر"
+        phone:
+          type: string
+          example: "09120000000"
+        is_active:
+          type: boolean
+          example: true
+        date_joined:
+          type: string
+          format: date-time
+
+    # ----- Product -----
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        code:
+          type: string
+          example: "P001"
+        name:
+          type: string
+          example: "محصول نمونه A1"
+        category_id:
+          type: integer
+          example: 1
+        unit:
+          type: string
+          example: "عدد"
+        shelf_life_days:
+          type: integer
+          example: 15
+        default_price:
+          type: number
+          format: float
+          example: 50000
+        barcode:
+          type: string
+          example: "6421000000017"
+        image_url:
+          type: string
+          format: url
+        is_active:
+          type: boolean
+          example: true
+
+    # ----- Inventory Lot -----
+    InventoryLot:
+      type: object
+      properties:
+        id:
+          type: integer
+        product_id:
+          type: integer
+        warehouse_id:
+          type: integer
+        batch_no:
+          type: string
+        production_date:
+          type: string
+          format: date
+        expiry_date:
+          type: string
+          format: date
+        initial_qty:
+          type: number
+          format: float
+        current_qty:
+          type: number
+          format: float
+        weighted_avg_cost:
+          type: number
+          format: float
+        status:
+          type: string
+          enum: [active, expired, disposed, returned]
+
+    # ----- Sales -----
+    SalesDraftRequest:
+      type: object
+      required: [store_id, sales_type, lines]
+      properties:
+        store_id:
+          type: integer
+          example: 1
+        sales_type:
+          type: string
+          enum: [consignment, firm]
+          example: "consignment"
+        device_id:
+          type: string
+          example: "device-uuid-abc123"
+        notes:
+          type: string
+        lines:
+          type: array
+          items:
+            type: object
+            required: [product_id, qty, unit_price]
+            properties:
+              product_id:
+                type: integer
+              lot_id:
+                type: integer
+                nullable: true
+              qty:
+                type: number
+                format: float
+              unit_price:
+                type: number
+                format: float
+              barcode_scanned:
+                type: string
+                nullable: true
+
+    SalesDraft:
+      allOf:
+        - $ref: '#/components/schemas/SalesDraftRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+            draft_no:
+              type: string
+            status:
+              type: string
+              enum: [pending, reviewing, approved, rejected, posted]
+              example: "pending"
+            sync_status:
+              type: string
+              enum: [offline, synced, failed]
+            total_amount:
+              type: number
+              format: float
+            created_at:
+              type: string
+              format: date-time
+
+    # ----- Store Order -----
+    StoreOrderRequest:
+      type: object
+      required: [lines]
+      properties:
+        lines:
+          type: array
+          items:
+            type: object
+            required: [product_id, qty]
+            properties:
+              product_id:
+                type: integer
+              qty:
+                type: number
+                format: float
+        notes:
+          type: string
+
+    StoreOrder:
+      allOf:
+        - $ref: '#/components/schemas/StoreOrderRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+            order_no:
+              type: string
+            store_id:
+              type: integer
+            status:
+              type: string
+              enum: [cart, submitted, under_review, approved, rejected, in_delivery, received, canceled]
+            total_amount:
+              type: number
+            payment_status:
+              type: string
+              enum: [initiated, paid, failed, verified, refunded]
+            expected_delivery:
+              type: string
+              format: date
+            created_at:
+              type: string
+              format: date-time
+
+    # ----- Payment -----
+    PaymentInitiateRequest:
+      type: object
+      required: [amount, related_doc_type, related_doc_id]
+      properties:
+        amount:
+          type: number
+          format: float
+          example: 500000
+        related_doc_type:
+          type: string
+          example: "store_order"
+        related_doc_id:
+          type: integer
+          example: 5
+        gateway:
+          type: string
+          enum: [zarinpal, idpay, parsian]
+          nullable: true
+
+    PaymentInitiateResponse:
+      type: object
+      properties:
+        transaction_id:
+          type: integer
+        redirect_url:
+          type: string
+          format: url
+        gateway:
+          type: string
+
+    # ----- Approval -----
+    ApprovalDecision:
+      type: object
+      required: [decision, reason]
+      properties:
+        decision:
+          type: string
+          enum: [approved, rejected]
+          example: "approved"
+        reason:
+          type: string
+          example: "تأیید شد"
+        notes:
+          type: string
+
+    # ----- Journal -----
+    JournalHeader:
+      type: object
+      properties:
+        id:
+          type: integer
+        journal_no:
+          type: string
+        date:
+          type: string
+          format: date
+        source_type:
+          type: string
+          enum: [sale, purchase, transfer, return, payment, manual]
+        total_debit:
+          type: number
+        total_credit:
+          type: number
+        status:
+          type: string
+          enum: [draft, posted, reversed, canceled]
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              account_code:
+                type: string
+              debit:
+                type: number
+              credit:
+                type: number
+              description:
+                type: string
+
+    # ----- Inventory Movement (FEFO) -----
+    FEFOAllocationRequest:
+      type: object
+      required: [product_id, warehouse_id, qty, sale_date]
+      properties:
+        product_id:
+          type: integer
+        warehouse_id:
+          type: integer
+        qty:
+          type: number
+          format: float
+        sale_date:
+          type: string
+          format: date
+
+    FEFOAllocationResponse:
+      type: object
+      properties:
+        allocated:
+          type: boolean
+        total_allocated_qty:
+          type: number
+        allocations:
+          type: array
+          items:
+            type: object
+            properties:
+              lot_id:
+                type: integer
+              qty:
+                type: number
+              unit_cost:
+                type: number
+              expiry_date:
+                type: string
+                format: date
+              days_to_expiry:
+                type: integer
+        warning:
+          type: string
+          nullable: true
+
+# ============================================================
+# Paths - Authentication
+# ============================================================
+paths:
+  /auth/login/:
+    post:
+      tags: [auth]
+      summary: ورود به سیستم
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '401':
+          description: نام کاربری یا رمز اشتباه
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/refresh/:
+    post:
+      tags: [auth]
+      summary: تمدید توکن
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh:
+                  type: string
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:
+                    type: string
+
+  /auth/me/:
+    get:
+      tags: [auth]
+      summary: اطلاعات کاربر فعلی
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /auth/logout/:
+    post:
+      tags: [auth]
+      summary: خروج
+      responses:
+        '200':
+          description: خروج موفق
+
+  /auth/register-fcm-token/:
+    post:
+      tags: [auth]
+      summary: ثبت Firebase Push Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fcm_token:
+                  type: string
+      responses:
+        '200':
+          description: ثبت شد
+
+  # ============================================================
+  # Products
+  # ============================================================
+  /products/:
+    get:
+      tags: [products]
+      summary: لیست محصولات
+      parameters:
+        - name: category_id
+          in: query
+          schema: { type: integer }
+        - name: is_active
+          in: query
+          schema: { type: boolean }
+        - name: search
+          in: query
+          schema: { type: string }
+          description: جستجو در نام یا کد
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+    post:
+      tags: [products]
+      summary: تعریف محصول جدید (مدیر)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: ساخته شد
+        '403':
+          description: دسترسی ندارید
+
+  /products/{id}/:
+    get:
+      tags: [products]
+      summary: جزئیات محصول
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: موفق
+        '404':
+          description: یافت نشد
+
+  /products/{id}/images/:
+    post:
+      tags: [products]
+      summary: آپلود تصویر محصول
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: آپلود شد
+
+  # ============================================================
+  # Inventory - FEFO
+  # ============================================================
+  /inventory/lots/:
+    get:
+      tags: [inventory]
+      summary: لیست لات‌ها
+      parameters:
+        - name: product_id
+          in: query
+          schema: { type: integer }
+        - name: warehouse_id
+          in: query
+          schema: { type: integer }
+        - name: status
+          in: query
+          schema: { type: string, enum: [active, expired, disposed] }
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoryLot'
+
+  /inventory/allocate-fefo/:
+    post:
+      tags: [inventory]
+      summary: تخصیص لات بر اساس FEFO
+      description: الگوریتم انتخاب لات‌های نزدیک به انقضا برای یک فروش
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FEFOAllocationRequest'
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FEFOAllocationResponse'
+        '400':
+          description: موجودی کافی نیست
+
+  /inventory/near-expiry/:
+    get:
+      tags: [inventory]
+      summary: لیست لات‌های در حال انقضا
+      parameters:
+        - name: days
+          in: query
+          schema: { type: integer, default: 5 }
+      responses:
+        '200':
+          description: موفق
+
+  # ============================================================
+  # Mobile - Distributor
+  # ============================================================
+  /mobile/sync/:
+    post:
+      tags: [mobile]
+      summary: همگام‌سازی پیش‌نویس‌های آفلاین
+      description: اپ موبایل عامل پس از بازگشت اینترنت، تمام پیش‌نویس‌های pending را sync می‌کند
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                device_id:
+                  type: string
+                drafts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SalesDraftRequest'
+      responses:
+        '200':
+          description: نتایج همگام‌سازی
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  synced:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        local_id:
+                          type: string
+                        server_id:
+                          type: integer
+                        status:
+                          type: string
+                  conflicts:
+                    type: array
+                    items:
+                      type: object
+
+  /mobile/snapshot/:
+    get:
+      tags: [mobile]
+      summary: دانلود snapshot موجودی فروشگاه‌های اختصاص‌یافته
+      description: هر صبح عامل این endpoint را فراخوانی می‌کند تا آخرین وضعیت موجودی را در SQLite محلی ذخیره کند
+      responses:
+        '200':
+          description: snapshot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  snapshot_date:
+                    type: string
+                    format: date
+                  stores:
+                    type: array
+                    items:
+                      type: object
+                  products:
+                    type: array
+                  prices:
+                    type: array
+
+  /mobile/drafts/:
+    post:
+      tags: [mobile]
+      summary: ثبت پیش‌نویس فروش (Draft)
+      description: عامل پیش‌نویس ثبت می‌کند. تا تأیید مدیر هیچ اثر انبار و حسابداری ندارد.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesDraftRequest'
+      responses:
+        '201':
+          description: ساخته شد
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesDraft'
+
+  /mobile/barcode/scan/:
+    post:
+      tags: [mobile, barcode]
+      summary: اسکن بارکد
+      description: عامل با گوشی بارکد را اسکن می‌کند. سیستم محصول را شناسایی و قیمت مخصوص فروشگاه را برمی‌گرداند.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                barcode:
+                  type: string
+                  example: "6421000000017"
+                store_id:
+                  type: integer
+      responses:
+        '200':
+          description: محصول یافت شد
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/Product'
+                  unit_price:
+                    type: number
+        '404':
+          description: بارکد نامشخص
+
+  # ============================================================
+  # Approval Workflow
+  # ============================================================
+  /approval/queue/:
+    get:
+      tags: [approval]
+      summary: لیست اسناد در انتظار تأیید
+      description: مدیر در داشبورد وب، اسناد pending را بازبینی می‌کند
+      parameters:
+        - name: ref_doc_type
+          in: query
+          schema: { type: string, enum: [sales_draft, store_order, transfer] }
+        - name: priority
+          in: query
+          schema: { type: string, enum: [low, medium, high, urgent] }
+      responses:
+        '200':
+          description: موفق
+
+  /approval/{id}/decide/:
+    post:
+      tags: [approval]
+      summary: تأیید یا رد سند
+      description: مدیر تصمیم نهایی را ثبت می‌کند
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecision'
+      responses:
+        '200':
+          description: تصمیم ثبت شد
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  posted_id:
+                    type: integer
+                    nullable: true
+        '400':
+          description: ورودی نامعتبر
+
+  # ============================================================
+  # Store Portal (B2B PWA)
+  # ============================================================
+  /store-portal/orders/:
+    get:
+      tags: [store-portal]
+      summary: لیست سفارش‌های فروشگاه
+      responses:
+        '200':
+          description: موفق
+    post:
+      tags: [store-portal]
+      summary: ثبت سفارش جدید
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreOrderRequest'
+      responses:
+        '201':
+          description: ساخته شد
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreOrder'
+
+  /store-portal/orders/{id}/:
+    get:
+      tags: [store-portal]
+      summary: جزئیات سفارش
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: موفق
+
+  /store-portal/orders/{id}/receive/:
+    post:
+      tags: [store-portal]
+      summary: تأیید دریافت کالا
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: دریافت شد
+
+  /store-portal/catalog/:
+    get:
+      tags: [store-portal]
+      summary: کاتالوگ محصولات با تصاویر
+      responses:
+        '200':
+          description: موفق
+
+  /store-portal/balance/:
+    get:
+      tags: [store-portal]
+      summary: مانده حساب فروشگاه
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_credit:
+                    type: number
+                  credit_limit:
+                    type: number
+                  available_credit:
+                    type: number
+
+  /store-portal/smart-reorder/:
+    get:
+      tags: [store-portal, loyalty]
+      summary: پیشنهاد سفارش هوشمند
+      description: بر اساس نرخ فروش ۷ روز گذشته و موجودی فعلی، پیشنهاد سفارش
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: integer
+                        suggested_qty:
+                          type: integer
+                        current_stock:
+                          type: number
+                        days_of_stock:
+                          type: number
+                        confidence:
+                          type: number
+
+  # ============================================================
+  # Payments
+  # ============================================================
+  /payments/initiate/:
+    post:
+      tags: [payments]
+      summary: شروع پرداخت آنلاین
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInitiateRequest'
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInitiateResponse'
+
+  /payments/callback/zarinpal/:
+    post:
+      tags: [payments]
+      summary: Callback از درگاه زرین‌پال
+      security: []
+      parameters:
+        - name: Authority
+          in: query
+          required: true
+          schema: { type: string }
+        - name: Status
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: موفق
+
+  /payments/callback/idpay/:
+    post:
+      tags: [payments]
+      summary: Callback از درگاه آیدی‌پی
+      security: []
+      responses:
+        '200':
+          description: موفق
+
+  /payments/callback/parsian/:
+    post:
+      tags: [payments]
+      summary: Callback از درگاه پارسیان
+      security: []
+      responses:
+        '200':
+          description: موفق
+
+  /payments/history/:
+    get:
+      tags: [payments]
+      summary: تاریخچه پرداخت‌ها
+      parameters:
+        - name: store_id
+          in: query
+          schema: { type: integer }
+        - name: status
+          in: query
+          schema: { type: string, enum: [initiated, paid, failed, verified] }
+      responses:
+        '200':
+          description: موفق
+
+  # ============================================================
+  # Sales (posted sales)
+  # ============================================================
+  /sales/:
+    get:
+      tags: [sales]
+      summary: لیست فروش‌های ثبت‌شده
+      parameters:
+        - name: store_id
+          in: query
+        - name: sales_type
+          in: query
+          schema: { type: string, enum: [consignment, firm] }
+        - name: date_from
+          in: query
+          schema: { type: string, format: date }
+        - name: date_to
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: موفق
+
+  /sales/{id}/:
+    get:
+      tags: [sales]
+      summary: جزئیات فروش
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: موفق
+
+  /sales/returns/:
+    post:
+      tags: [sales]
+      summary: ثبت برگشت از فروشگاه
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [store_id, original_sale_id, lines]
+              properties:
+                store_id:
+                  type: integer
+                original_sale_id:
+                  type: integer
+                reason:
+                  type: string
+                lines:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: integer
+                      qty:
+                        type: number
+                      condition:
+                        type: string
+                        enum: [sellable, expired, damaged, near_expiry]
+      responses:
+        '201':
+          description: ساخته شد
+
+  # ============================================================
+  # Transfers (between stores)
+  # ============================================================
+  /transfers/:
+    get:
+      tags: [transfers]
+      summary: لیست انتقال‌ها
+      responses:
+        '200':
+          description: موفق
+    post:
+      tags: [transfers]
+      summary: ثبت درخواست انتقال
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [from_store_id, to_store_id, lines]
+              properties:
+                from_store_id:
+                  type: integer
+                to_store_id:
+                  type: integer
+                reason:
+                  type: string
+                lines:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: integer
+                      lot_id:
+                        type: integer
+                      qty:
+                        type: number
+      responses:
+        '201':
+          description: ساخته شد
+
+  /transfers/suggestions/:
+    get:
+      tags: [transfers]
+      summary: پیشنهاد انتقال FEFO
+      description: سیستم به‌صورت خودکار لات‌های در حال انقضا را شناسایی و انتقال از فروشگاه کم‌فروش به پرفروش را پیشنهاد می‌دهد
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lot_id:
+                          type: integer
+                        from_store_id:
+                          type: integer
+                        to_store_id:
+                          type: integer
+                        qty:
+                          type: number
+                        urgency:
+                          type: string
+                          enum: [high, medium, low]
+
+  # ============================================================
+  # Accounting
+  # ============================================================
+  /accounting/journals/:
+    get:
+      tags: [accounting]
+      summary: لیست اسناد حسابداری
+      parameters:
+        - name: date_from
+          in: query
+        - name: date_to
+          in: query
+        - name: source_type
+          in: query
+      responses:
+        '200':
+          description: موفق
+    post:
+      tags: [accounting]
+      summary: ثبت سند دستی (حسابدار)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalHeader'
+      responses:
+        '201':
+          description: ساخته شد
+        '400':
+          description: سند نامتوازن
+
+  /accounting/trial-balance/:
+    get:
+      tags: [accounting]
+      summary: تراز آزمایشی
+      parameters:
+        - name: as_of_date
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: موفق
+
+  /accounting/profit-loss/:
+    get:
+      tags: [accounting]
+      summary: گزارش سود و زیان
+      parameters:
+        - name: from_date
+          in: query
+        - name: to_date
+          in: query
+        - name: cost_center_id
+          in: query
+      responses:
+        '200':
+          description: موفق
+
+  # ============================================================
+  # Tax (Saman)
+  # ============================================================
+  /tax/invoices/:
+    get:
+      tags: [tax]
+      summary: لیست صورتحساب‌های سامان
+      responses:
+        '200':
+          description: موفق
+    post:
+      tags: [tax]
+      summary: ارسال صورتحساب به سامان (خودکار)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sales_id:
+                  type: integer
+      responses:
+        '201':
+          description: ارسال شد (در انتظار تأیید سامان)
+
+  /tax/invoices/{id}/status/:
+    get:
+      tags: [tax]
+      summary: بررسی وضعیت صورتحساب
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: موفق
+
+  # ============================================================
+  # Loyalty
+  # ============================================================
+  /loyalty/tier/{store_id}/:
+    get:
+      tags: [loyalty]
+      summary: لایه وفاداری فروشگاه
+      parameters:
+        - name: store_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tier:
+                    type: string
+                    enum: [regular, silver, gold, platinum]
+                  points:
+                    type: integer
+                  discount_pct:
+                    type: number
+                  credit_limit:
+                    type: number
+
+  /loyalty/transactions/:
+    get:
+      tags: [loyalty]
+      summary: تراکنش‌های وفاداری
+      parameters:
+        - name: store_id
+          in: query
+      responses:
+        '200':
+          description: موفق
+
+  # ============================================================
+  # Notifications
+  # ============================================================
+  /notifications/unread-count/:
+    get:
+      tags: [notifications]
+      summary: تعداد اعلان‌های خوانده‌نشده
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+
+  /notifications/:
+    get:
+      tags: [notifications]
+      summary: لیست اعلان‌ها
+      responses:
+        '200':
+          description: موفق
+
+  /notifications/{id}/mark-read/:
+    post:
+      tags: [notifications]
+      summary: علامت‌گذاری اعلان به‌عنوان خوانده‌شده
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: موفق
+
+  # ============================================================
+  # Reports
+  # ============================================================
+  /reports/dashboard/:
+    get:
+      tags: [reports]
+      summary: داشبورد بلادرنگ مدیر
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  today_sales:
+                    type: number
+                  today_dispatch_count:
+                    type: integer
+                  pending_approvals:
+                    type: integer
+                  near_expiry_lots:
+                    type: integer
+                  low_stock_products:
+                    type: integer
+                  active_stores:
+                    type: integer
+                  active_distributors:
+                    type: integer
+
+  /reports/geo-heatmap/:
+    get:
+      tags: [reports]
+      summary: گزارش جغرافیایی Heatmap فروش
+      parameters:
+        - name: from_date
+          in: query
+        - name: to_date
+          in: query
+      responses:
+        '200':
+          description: موفق
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stores:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        store_id:
+                          type: integer
+                        name:
+                          type: string
+                        lat:
+                          type: number
+                        lng:
+                          type: number
+                        total_sales:
+                          type: number
+                        intensity:
+                          type: string
+                          enum: [low, medium, high, very_high]
+
+  /reports/waste-monthly/:
+    get:
+      tags: [reports]
+      summary: گزارش ضایعات ماهانه
+      responses:
+        '200':
+          description: موفق
+
+  # ============================================================
+  # Health
+  # ============================================================
+  /health/:
+    get:
+      tags: []
+      summary: Health Check
+      security: []
+      description: بررسی سلامت سیستم و وابستگی‌ها (DB, Redis, Celery)
+      responses:
+        '200':
+          description: سیستم سالم است
+        '503':
+          description: سرویس در حالت نامطلوب
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  checks:
+                    type: object

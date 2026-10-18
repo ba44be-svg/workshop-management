@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Wireframe — پورتال فروشگاه (PWA)</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@page { size: A4; margin: 10mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Vazirmatn', sans-serif; direction: rtl; background: #f5f5f5; padding: 20px; }
+.page-title { text-align: center; font-size: 24px; font-weight: 700; margin: 20px 0; color: #1a365d; }
+.frame { background: white; border: 2px solid #333; border-radius: 8px; margin: 0 auto; }
+.header { background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%); color: white; padding: 16px 24px; }
+.header h1 { font-size: 18px; margin-bottom: 4px; }
+.header .store-info { font-size: 11px; opacity: 0.9; }
+.balance-bar { background: white; padding: 12px 24px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-around; font-size: 11px; }
+.balance-bar .stat { text-align: center; }
+.balance-bar .stat-value { font-size: 16px; font-weight: 700; color: #1a365d; }
+.balance-bar .stat-label { font-size: 10px; color: #666; }
+.tabs { display: flex; background: #f0f0f0; }
+.tabs span { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-size: 12px; border-bottom: 2px solid transparent; }
+.tabs span.active { background: white; border-bottom-color: #1a365d; font-weight: 600; }
+.content { padding: 20px; min-height: 400px; }
+.catalog-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.product-card { border: 1px solid #ddd; border-radius: 6px; padding: 12px; text-align: center; }
+.product-img { background: linear-gradient(45deg, #e0e0e0 25%, #f0f0f0 25%); background-size: 20px 20px; height: 80px; border-radius: 4px; margin-bottom: 8px; }
+.product-card h5 { font-size: 12px; margin-bottom: 4px; }
+.product-card .price { font-size: 13px; font-weight: 700; color: #1a365d; margin-bottom: 8px; }
+.qty-control { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.qty-control button { width: 24px; height: 24px; border: 1px solid #1a365d; background: white; border-radius: 4px; cursor: pointer; }
+.qty-control .qty { font-weight: 600; font-size: 12px; min-width: 30px; }
+.smart-badge { background: #ffc107; color: #333; padding: 2px 6px; border-radius: 8px; font-size: 9px; margin-bottom: 4px; display: inline-block; }
+.cart-summary { background: #f0f4ff; padding: 16px; border-radius: 6px; margin-top: 16px; }
+.btn { background: #1a365d; color: white; padding: 10px; text-align: center; border-radius: 4px; font-size: 13px; cursor: pointer; }
+.btn-pay { background: #2f855a; }
+.order-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 12px; }
+.status-badge { padding: 2px 8px; border-radius: 8px; font-size: 10px; }
+.status-pending { background: #ffc107; }
+.status-approved { background: #d4edda; color: #155724; }
+.status-rejected { background: #f8d7da; color: #721c24; }
+.notification { background: #e7f1ff; border-right: 3px solid #1a365d; padding: 10px; margin-bottom: 8px; border-radius: 4px; font-size: 11px; }
+.annotation { background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 4px; font-size: 12px; margin: 20px auto; max-width: 800px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Wireframe — پورتال فروشگاه (PWA)</div>
+
+<!-- Page 1: Catalog + Cart -->
+<div class="frame" style="width: 800px; margin: 0 auto 30px;">
+    <div class="header">
+        <h1>🛒 پورتال فروشگاه — سوپرمارکت نمونه ۱</h1>
+        <div class="store-info">کد: S001 | لایه: Gold | مدیریت: آقای رضا</div>
+    </div>
+    <div class="balance-bar">
+        <div class="stat">
+            <div class="stat-value">۸٫۵M</div>
+            <div class="stat-label">مانده بدهی (ریال)</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">۱۰M</div>
+            <div class="stat-label">سقف اعتبار</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">۱٫۵M</div>
+            <div class="stat-label">اعتبار باقی‌مانده</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">۱۲۵</div>
+            <div class="stat-label">امتیاز وفاداری</div>
+        </div>
+    </div>
+    <div class="tabs">
+        <span>🏠 داشبورد</span>
+        <span class="active">🛒 کاتالوگ</span>
+        <span>📋 سفارش‌ها</span>
+        <span>💳 پرداخت</span>
+        <span>📊 گزارش</span>
+    </div>
+    <div class="content">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <input type="text" placeholder="🔍 جستجوی محصول..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-left: 8px;">
+            <select style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;"><option>همه دسته‌ها</option><option>گروه A</option></select>
+        </div>
+
+        <div class="catalog-grid">
+            <div class="product-card">
+                <div class="product-img">📷</div>
+                <h5>محصول A1</h5>
+                <div class="price">۵۰٬۰۰۰ ریال</div>
+                <div class="qty-control">
+                    <button>−</button><span class="qty">۰</span><button>+</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">📷</div>
+                <span class="smart-badge">⚡ Smart Reorder</span>
+                <h5>محصول B2</h5>
+                <div class="price">۱۰۰٬۰۰۰ ریال</div>
+                <div class="qty-control">
+                    <button>−</button><span class="qty">۲۰</span><button>+</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">📷</div>
+                <h5>محصول A3</h5>
+                <div class="price">۶۰٬۰۰۰ ریال</div>
+                <div class="qty-control">
+                    <button>−</button><span class="qty">۰</span><button>+</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">📷</div>
+                <h5>محصول C1</h5>
+                <div class="price">۱۵۰٬۰۰۰ ریال</div>
+                <div class="qty-control">
+                    <button>−</button><span class="qty">۰</span><button>+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                <span>🛒 سبد: ۱ قلم (۲۰ عدد)</span>
+                <strong>جمع: ۲٬۰۰۰٬۰۰۰ ریال</strong>
+            </div>
+            <div style="font-size: 10px; color: #666; margin-bottom: 8px;">
+                ✅ در محدوده اعتبار شما | ⚠ پیشنهاد Smart Reorder فعال است
+            </div>
+            <div class="btn">ثبت سفارش →</div>
+        </div>
+    </div>
+</div>
+
+<!-- Page 2: Orders + Notifications -->
+<div class="frame" style="width: 800px; margin: 0 auto 30px;">
+    <div class="header">
+        <h1>📋 سفارش‌های من + اعلان‌ها</h1>
+        <div class="store-info">کد: S001 | ۳ سفارش فعال</div>
+    </div>
+    <div class="tabs">
+        <span>🏠 داشبورد</span>
+        <span>🛒 کاتالوگ</span>
+        <span class="active">📋 سفارش‌ها</span>
+        <span>💳 پرداخت</span>
+        <span>📊 گزارش</span>
+    </div>
+    <div class="content">
+
+        <h3 style="font-size: 14px; margin-bottom: 12px;">🔔 اعلان‌های اخیر</h3>
+        <div class="notification">✅ سفارش #OR-1404-000045 تأیید شد. تحویل فردا قبل از ظهر.</div>
+        <div class="notification">💳 پرداخت ۵۰۰٬۰۰۰ ریال دریافت شد. کد پیگیری: ۱۲۳۴۵۶</div>
+        <div class="notification">🎉 تبریک! شما به لایه Gold ارتقا یافتید. تخفیف ۵٪ فعال شد.</div>
+
+        <h3 style="font-size: 14px; margin: 20px 0 12px;">📋 لیست سفارش‌ها</h3>
+
+        <div class="order-item">
+            <div>
+                <strong>#OR-1404-000045</strong> | امروز<br>
+                <span style="color: #666; font-size: 10px;">۲ قلم | ۱٫۲M ریال</span>
+            </div>
+            <div>
+                <span class="status-badge status-approved">✓ تأیید شد</span><br>
+                <span style="font-size: 10px; color: #666;">تحویل فردا</span>
+            </div>
+        </div>
+        <div class="order-item">
+            <div>
+                <strong>#OR-1404-000044</strong> | دیروز<br>
+                <span style="color: #666; font-size: 10px;">۵ قلم | ۳٫۵M ریال</span>
+            </div>
+            <div>
+                <span class="status-badge" style="background: #cce5ff; color: #004085;">📦 در حال تحویل</span><br>
+                <span style="font-size: 10px; color: #666;">عامل ۲ در مسیر</span>
+            </div>
+        </div>
+        <div class="order-item">
+            <div>
+                <strong>#OR-1404-000043</strong> | ۲ روز پیش<br>
+                <span style="color: #666; font-size: 10px;">۳ قلم | ۸۰۰٬۰۰۰ ریال</span>
+            </div>
+            <div>
+                <span class="status-badge" style="background: #d4edda; color: #155724;">✓ تحویل شد</span><br>
+                <button style="font-size: 10px; padding: 2px 6px; background: #1a365d; color: white; border: none; border-radius: 3px;">تأیید دریافت</button>
+            </div>
+        </div>
+        <div class="order-item">
+            <div>
+                <strong>#OR-1404-000042</strong> | ۳ روز پیش<br>
+                <span style="color: #666; font-size: 10px;">۲ قلم | ۶۰۰٬۰۰۰ ریال</span>
+            </div>
+            <div>
+                <span class="status-badge status-rejected">✗ رد شد</span><br>
+                <span style="font-size: 10px; color: #c53030;">دلیل: ناموجودی</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page 3: Payment -->
+<div class="frame" style="width: 800px; margin: 0 auto;">
+    <div class="header">
+        <h1>💳 پرداخت آنلاین</h1>
+        <div class="store-info">مانده بدهی: ۸٫۵M ریال</div>
+    </div>
+    <div class="tabs">
+        <span>🏠 داشبورد</span>
+        <span>🛒 کاتالوگ</span>
+        <span>📋 سفارش‌ها</span>
+        <span class="active">💳 پرداخت</span>
+        <span>📊 گزارش</span>
+    </div>
+    <div class="content">
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 14px; color: #666;">مانده بدهی فعلی شما:</div>
+            <div style="font-size: 32px; font-weight: 700; color: #c53030; margin: 8px 0;">۸٬۵۰۰٬۰۰۰ ریال</div>
+            <div style="font-size: 11px; color: #666;">(شامل ۵ سفارش تحویل‌شده)</div>
+        </div>
+
+        <h3 style="font-size: 14px; margin-bottom: 12px;">💵 انتخاب مبلغ پرداخت</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;">
+            <div style="border: 1px solid #1a365d; padding: 12px; text-align: center; border-radius: 4px; cursor: pointer;">
+                <div style="font-size: 13px; font-weight: 600;">کامل</div>
+                <div style="font-size: 11px; color: #666;">۸٫۵M ریال</div>
+            </div>
+            <div style="border: 2px solid #1a365d; background: #f0f4ff; padding: 12px; text-align: center; border-radius: 4px; cursor: pointer;">
+                <div style="font-size: 13px; font-weight: 600;">نصف</div>
+                <div style="font-size: 11px; color: #666;">۴٫۲۵M ریال</div>
+            </div>
+            <div style="border: 1px solid #1a365d; padding: 12px; text-align: center; border-radius: 4px; cursor: pointer;">
+                <div style="font-size: 13px; font-weight: 600;">سفارشی</div>
+                <div style="font-size: 11px; color: #666;">وارد کنید</div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 14px; margin-bottom: 12px;">🏦 انتخاب درگاه</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;">
+            <div style="border: 2px solid #2f855a; padding: 12px; text-align: center; border-radius: 4px; background: #f0fff4;">
+                <div style="font-size: 13px; font-weight: 600;">زرین‌پال</div>
+                <div style="font-size: 10px; color: #666;">پیشنهادی</div>
+            </div>
+            <div style="border: 1px solid #ccc; padding: 12px; text-align: center; border-radius: 4px;">
+                <div style="font-size: 13px;">آیدی‌پی</div>
+            </div>
+            <div style="border: 1px solid #ccc; padding: 12px; text-align: center; border-radius: 4px;">
+                <div style="font-size: 13px;">بانک پارسیان</div>
+            </div>
+        </div>
+
+        <div class="btn btn-pay" style="font-size: 16px; padding: 14px;">
+            💳 پرداخت ۴٬۲۵۰٬۰۰۰ ریال از طریق زرین‌پال
+        </div>
+
+        <div style="font-size: 11px; color: #666; margin-top: 12px; text-align: center;">
+            🔒 اتصال امن SSL | کارمزد درگاه: ۱٫۵٪
+        </div>
+    </div>
+</div>
+
+<div class="annotation">
+    📝 نکته طراحی پورتال فروشگاه:<br>
+    • PWA با Next.js + Tailwind RTL پیاده‌سازی می‌شه<br>
+    • <strong>کاتالوگ تصویری</strong>: هر محصول با تصویر در ۳ رزولوشن (thumbnail, medium, original)<br>
+    • <strong>Smart Reorder</strong>: سیستم به‌طور خودکار محصولات کم‌موجودی را پیشنهاد می‌ده<br>
+    • <strong>سه درگاه پرداخت</strong>: زرین‌پال (پیشنهادی)، آیدی‌پی، پارسیان — امکان fallback<br>
+    • <strong>مانده بدهی</strong> و <strong>سقف اعتبار</strong> در همه صفحات قابل مشاهده<br>
+    • <strong>Push Notification</strong>: اطلاع‌رسانی تأیید سفارش، رد، تحویل، ارتقاء Tier
+</div>
+
+</body>
+</html>

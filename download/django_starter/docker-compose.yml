@@ -1,0 +1,240 @@
+# ============================================================
+# docker-compose.yml — تمام سرویس‌ها در یک فایل
+# استفاده: docker compose up -d
+# ============================================================
+version: '3.8'
+
+services:
+  # ============================================================
+  # PostgreSQL Database
+  # ============================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: workshop_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-workshop_db}
+      POSTGRES_USER: ${DB_USER:-workshop_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-workshop_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql_migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-workshop_user} -d ${DB_NAME:-workshop_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # Redis Cache & Celery Broker
+  # ============================================================
+  redis:
+    image: redis:7-alpine
+    container_name: workshop_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # RabbitMQ — Celery Broker (alternative to Redis)
+  # ============================================================
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: workshop_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # MinIO — Object Storage (compatible with S3)
+  # ============================================================
+  minio:
+    image: minio/minio:latest
+    container_name: workshop_minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID:-minio-access-key}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY:-minio-secret-key}
+    ports:
+      - "9000:9000"  # API
+      - "9001:9001"  # Console UI
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # Django Backend (Web)
+  # ============================================================
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.backend
+    container_name: workshop_backend
+    restart: unless-stopped
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DATABASE_URL: postgres://${DB_USER:-workshop_user}:${DB_PASSWORD:-workshop_password}@postgres:5432/${DB_NAME:-workshop_db}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app/backend
+      - ./media:/app/media
+      - ./logs:/app/logs
+      - ./secrets:/app/secrets:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # Celery Worker — Async Tasks
+  # ============================================================
+  celery_worker:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.backend
+    container_name: workshop_celery_worker
+    restart: unless-stopped
+    command: celery -A config worker --loglevel=info --concurrency=4 -Q default,sms,push,payments,saman
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DATABASE_URL: postgres://${DB_USER:-workshop_user}:${DB_PASSWORD:-workshop_password}@postgres:5432/${DB_NAME:-workshop_db}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app/backend
+      - ./media:/app/media
+      - ./logs:/app/logs
+      - ./secrets:/app/secrets:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # Celery Beat — Scheduled Tasks
+  # ============================================================
+  celery_beat:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.backend
+    container_name: workshop_celery_beat
+    restart: unless-stopped
+    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DATABASE_URL: postgres://${DB_USER:-workshop_user}:${DB_PASSWORD:-workshop_password}@postgres:5432/${DB_NAME:-workshop_db}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app/backend
+      - ./logs:/app/logs
+    depends_on:
+      - celery_worker
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # Flower — Celery Monitoring
+  # ============================================================
+  flower:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.backend
+    container_name: workshop_flower
+    restart: unless-stopped
+    command: celery -A config flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
+    env_file:
+      - .env
+    depends_on:
+      - celery_worker
+    networks:
+      - workshop_network
+
+  # ============================================================
+  # Nginx — Reverse Proxy
+  # ============================================================
+  nginx:
+    image: nginx:alpine
+    container_name: workshop_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/ssl:/etc/nginx/ssl:ro
+      - ./staticfiles:/var/www/static:ro
+      - ./media:/var/www/media:ro
+    depends_on:
+      - backend
+    networks:
+      - workshop_network
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  minio_data:
+
+networks:
+  workshop_network:
+    driver: bridge

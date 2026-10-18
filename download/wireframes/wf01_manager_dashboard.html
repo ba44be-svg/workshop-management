@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Wireframe — داشبورد مدیر</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@page { size: A4 landscape; margin: 10mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Vazirmatn', sans-serif; direction: rtl; background: #f5f5f5; padding: 20px; }
+.frame { background: white; border: 2px solid #333; border-radius: 8px; padding: 0; margin: 0 auto; }
+.header { background: #1a365d; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 18px; }
+.header .user { font-size: 12px; }
+.tabs { background: #f0f0f0; padding: 8px 24px; border-bottom: 1px solid #ccc; }
+.tabs span { padding: 8px 16px; margin: 0 4px; background: white; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.tabs span.active { background: #1a365d; color: white; }
+.content { padding: 24px; min-height: 600px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi { border: 1px solid #ccc; padding: 16px; border-radius: 6px; background: #fafafa; }
+.kpi-label { font-size: 12px; color: #666; margin-bottom: 4px; }
+.kpi-value { font-size: 24px; font-weight: 700; color: #1a365d; }
+.kpi-delta { font-size: 11px; margin-top: 4px; }
+.kpi-delta.up { color: #2f855a; }
+.kpi-delta.down { color: #c53030; }
+.charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+.chart-box { border: 1px solid #ccc; padding: 16px; border-radius: 6px; min-height: 200px; }
+.chart-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: #333; }
+.mock-chart { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 25%, #e0e0e0 50%, #f0f0f0 50%, #f0f0f0 75%, #e0e0e0 75%); background-size: 30px 30px; height: 120px; border: 1px dashed #999; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px; }
+.approvals { border: 1px solid #ccc; padding: 16px; border-radius: 6px; }
+.approval-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 12px; }
+.btn { display: inline-block; padding: 4px 8px; background: #1a365d; color: white; border-radius: 3px; font-size: 10px; margin: 0 2px; }
+.btn-reject { background: #c53030; }
+.page-title { text-align: center; font-size: 24px; font-weight: 700; margin: 20px 0; color: #1a365d; }
+.annotation { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 12px; border-radius: 4px; font-size: 11px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Wireframe — داشبورد مدیر</div>
+
+<div class="frame">
+    <div class="header">
+        <h1>داشبورد مدیریت کارگاه تولیدی</h1>
+        <div class="user">👤 مدیر سیستم | 1404/07/25</div>
+    </div>
+    <div class="tabs">
+        <span class="active">📊 داشبورد</span>
+        <span>📦 محصولات</span>
+        <span>🏭 تولید</span>
+        <span>🚚 پخش</span>
+        <span>💰 حسابداری</span>
+        <span>👥 کاربران</span>
+        <span>🔔 اعلان‌ها (3)</span>
+    </div>
+    <div class="content">
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi">
+                <div class="kpi-label">فروش امروز (ریال)</div>
+                <div class="kpi-value">۱۲٫۵M</div>
+                <div class="kpi-delta up">▲ 12% نسبت به دیروز</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">پخش فعال امروز</div>
+                <div class="kpi-value">3</div>
+                <div class="kpi-delta">از ۳ عامل</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">در انتظار تأیید</div>
+                <div class="kpi-value">8</div>
+                <div class="kpi-delta down">▼ پیش‌نویس + سفارش</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">لات‌های نزدیک به انقضا</div>
+                <div class="kpi-value">5</div>
+                <div class="kpi-delta down">▼ نیاز به انتقال FEFO</div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-row">
+            <div class="chart-box">
+                <div class="chart-title">فروش ۷ روز اخیر</div>
+                <div class="mock-chart">📊 [نمودار خطی - فروش روزانه]</div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">پیشنهاد انتقال FEFO</div>
+                <div style="font-size: 11px;">
+                    <div style="margin-bottom: 6px;">📦 محصول A — ۳ روز تا انقضا<br><span style="color: #999">از: فروشگاه ۵ → به: فروشگاه ۱۲</span></div>
+                    <div>📦 محصول B — ۴ روز تا انقضا<br><span style="color: #999">از: فروشگاه ۲ → به: فروشگاه ۸</span></div>
+                </div>
+                <span class="btn" style="margin-top: 8px;">تأیید همه</span>
+            </div>
+        </div>
+
+        <!-- Approval Queue -->
+        <div class="approvals">
+            <div class="chart-title">📋 صف تأیید</div>
+            <div class="approval-item">
+                <span>پیش‌نویس #DR-1404-000123 | عامل ۱ | فروشگاه ۵ | ۳۵۰،۰۰۰ ریال</span>
+                <span>
+                    <span class="btn">تأیید</span>
+                    <span class="btn btn-reject">رد</span>
+                </span>
+            </div>
+            <div class="approval-item">
+                <span>سفارش #OR-1404-000045 | فروشگاه ۳ | ۱٫۲M ریال</span>
+                <span>
+                    <span class="btn">تأیید</span>
+                    <span class="btn btn-reject">رد</span>
+                </span>
+            </div>
+            <div class="approval-item">
+                <span>انتقال #TR-1404-000012 | فروشگاه ۵ → فروشگاه ۸</span>
+                <span>
+                    <span class="btn">تأیید</span>
+                    <span class="btn btn-reject">رد</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="annotation">
+            📝 نکته طراحی: مدیر با یک نگاه، ۴ KPI کلیدی + نمودار فروش + پیشنهاد FEFO + صف تأیید را می‌بیند.
+            این طراحی برای تصمیم‌گیری سریع در ۳۰ ثانیه بهینه شده است.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
