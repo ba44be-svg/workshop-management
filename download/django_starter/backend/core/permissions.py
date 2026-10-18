@@ -40,6 +40,11 @@ class IsManagerOrDistributor(BasePermission):
         return request.user.is_authenticated and request.user.role in ('manager', 'distributor')
 
 
+class IsManagerOrStorekeeper(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in ('manager', 'storekeeper')
+
+
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.method in ('GET', 'HEAD', 'OPTIONS')

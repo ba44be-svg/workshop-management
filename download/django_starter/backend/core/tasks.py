@@ -26,7 +26,6 @@ def send_visit_reminders():
     from apps.dispatch.models import Route
 
     tomorrow = (timezone.now() + timedelta(days=1)).date()
-    # 0 = شنبه in Python, but in our system let's use 0 = tomorrow.weekday()
     day_of_week = tomorrow.weekday()
 
     routes = Route.objects.filter(day_of_week=day_of_week, is_active=True)
@@ -49,7 +48,6 @@ def send_visit_reminders():
 @shared_task
 def generate_transfer_suggestions():
     """پیشنهاد انتقال FEFO (هر شب اجرا می‌شود)"""
-    # Implementation in apps.loyalty.services
     from apps.loyalty.services.smart_reorder import generate_transfer_suggestions as impl
     count = impl()
     return f'Generated {count} transfer suggestions'

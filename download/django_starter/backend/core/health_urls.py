@@ -4,7 +4,6 @@ Health check endpoints
 from django.http import JsonResponse
 from django.db import connection
 from django.core.cache import cache
-import redis
 
 
 def health_check(request):
@@ -59,3 +58,10 @@ def readiness_check(request):
 def liveness_check(request):
     """زنده بودن"""
     return JsonResponse({'status': 'alive'})
+
+
+urlpatterns = [
+    ('', health_check),
+    ('/ready/', readiness_check),
+    ('/live/', liveness_check),
+]

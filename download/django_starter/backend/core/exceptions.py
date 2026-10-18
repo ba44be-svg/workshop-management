@@ -12,7 +12,7 @@ class InsufficientStockError(APIException):
 
 
 class NearExpiryWarning(APIException):
-    status_code = status.HTTP_200_OK  # Not an error, just a warning
+    status_code = status.HTTP_200_OK
     default_detail = 'کالای نزدیک به انقضا'
     default_code = 'near_expiry'
 
