@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
 
-class Approval_workflowConfig(AppConfig):
+class ApprovalWorkflowConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.approval_workflow'
+    verbose_name = 'جریان تأیید'
