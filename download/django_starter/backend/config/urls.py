@@ -43,9 +43,6 @@ urlpatterns = [
     path('api/barcode/', include('apps.barcode.urls')),
     path('api/tax/', include('apps.saman_tax.urls')),
 
-    # Mobile-specific endpoints
-    path('api/mobile/', include('apps.mobile.urls')),  # Note: mobile is part of distributor/portal
-
     # Notifications
     path('api/notifications/', include('apps.notifications.urls')),
 

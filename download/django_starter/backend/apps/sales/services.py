@@ -6,7 +6,7 @@ from typing import List, Optional
 from django.db import transaction
 from django.utils import timezone
 from django.utils.text import slugify
-from ..core.exceptions import InsufficientStockError
+from core.exceptions import InsufficientStockError
 from .models import SalesHeader, SalesLine, ReturnHeader, ReturnLine
 from apps.inventory.models import InventoryLot
 from apps.inventory.services.fefo_service import (

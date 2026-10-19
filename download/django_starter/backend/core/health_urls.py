@@ -1,6 +1,4 @@
-"""
-Health check endpoints
-"""
+from django.urls import path
 from django.http import JsonResponse
 from django.db import connection
 from django.core.cache import cache
@@ -15,7 +13,6 @@ def health_check(request):
     }
     overall = 'ok'
 
-    # Database check
     try:
         with connection.cursor() as cursor:
             cursor.execute('SELECT 1')
@@ -25,7 +22,6 @@ def health_check(request):
         checks['database'] = f'error: {str(e)[:100]}'
         overall = 'error'
 
-    # Redis check
     try:
         cache.set('health_check', '1', 5)
         cache.get('health_check')
@@ -34,7 +30,6 @@ def health_check(request):
         checks['redis'] = f'error: {str(e)[:100]}'
         overall = 'degraded'
 
-    # Celery check (simplified)
     try:
         from django_celery_results.models import TaskResult
         recent = TaskResult.objects.filter(status='SUCCESS').count()
@@ -51,17 +46,15 @@ def health_check(request):
 
 
 def readiness_check(request):
-    """آماده بودن برای ترافیک"""
     return JsonResponse({'status': 'ready'})
 
 
 def liveness_check(request):
-    """زنده بودن"""
     return JsonResponse({'status': 'alive'})
 
 
 urlpatterns = [
-    ('', health_check),
-    ('/ready/', readiness_check),
-    ('/live/', liveness_check),
+    path('', health_check),
+    path('ready/', readiness_check),
+    path('live/', liveness_check),
 ]

@@ -1,23 +1,8 @@
 """
 Barcode Admin
+Barcode و BarcodeScan مدل‌ها در apps.products تعریف شده‌اند.
+Admin آنها در apps/products/admin.py ثبت شده است.
+این فایل فقط برای مستندسازی است.
 """
-from django.contrib import admin
-from apps.products.models import Barcode, BarcodeScan
-
-
-@admin.register(Barcode)
-class BarcodeAdmin(admin.ModelAdmin):
-    list_display = ('barcode_value', 'entity_type', 'entity_id', 'created_at')
-    list_filter = ('entity_type',)
-    search_fields = ('barcode_value',)
-    readonly_fields = ('created_at',)
-
-
-@admin.register(BarcodeScan)
-class BarcodeScanAdmin(admin.ModelAdmin):
-    list_display = ('barcode_value', 'scanned_by', 'scan_context',
-                    'ref_doc_type', 'scanned_at', 'device_id')
-    list_filter = ('scan_context', 'scanned_at')
-    search_fields = ('barcode_value', 'scanned_by__username')
-    date_hierarchy = 'scanned_at'
-    readonly_fields = ('scanned_at',)
+# Barcode و BarcodeScan در apps.products.admin ثبت شده‌اند
+# این فایل خالی است تا از ثبت مجدد جلوگیری شود

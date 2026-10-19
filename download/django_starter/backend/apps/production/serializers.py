@@ -1,6 +1,7 @@
 """
 Production Serializers
 """
+from decimal import Decimal
 from rest_framework import serializers
 from .models import ProductionBatch, ProductionConsumption, ProductionOutput
 from apps.inventory.serializers import InventoryLotSerializer
