@@ -1,7 +1,6 @@
-# Workspace Management — Django Starter Project v2.0
+# نرم‌افزار جامع مدیریت تولید و پخش — v2.0
 
-> **نرم‌افزار جامع مدیریت تولید و پخش کارگاه‌های تولیدی**
-> اسکلت آماده برای شروع توسعه با ۱۷ Django App + Docker Compose + CI/CD
+> سیستم مدیریت تولید، انبار، فروش و حسابداری
 
 ## 📦 محتویات
 
@@ -263,8 +262,8 @@ docker compose restart backend
 
 | Artifact | مسیر |
 |---------|------|
-| سند معماری PDF | `../bakery_erd_doc_v2.pdf` |
-| سند معماری HTML | `../bakery_erd_doc_v2.html` |
+| سند معماری PDF | سند معماری فایل |
+| سند معماری HTML | نسخه HTML |
 | SQL Migrations | `../sql_migrations/` |
 | API Specification | (در فاز C تولید می‌شود) |
 | UI Wireframes | (در فاز D تولید می‌شود) |

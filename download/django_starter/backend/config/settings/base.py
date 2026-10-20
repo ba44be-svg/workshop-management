@@ -145,8 +145,8 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Workshop Management API',
-    'DESCRIPTION': 'نرم‌افزار جامع مدیریت تولید و پخش کارگاه‌های تولیدی',
+    'TITLE': 'نرم‌افزار جامع مدیریت تولید و پخش',
+    'DESCRIPTION': 'سیستم مدیریت تولید، انبار، فروش و حسابداری',
     'VERSION': '2.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'CONTACT': {

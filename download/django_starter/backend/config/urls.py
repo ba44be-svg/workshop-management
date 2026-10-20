@@ -11,6 +11,11 @@ from drf_spectacular.views import (
     SpectacularRedocView,
 )
 
+# Admin site title
+admin.site.site_header = 'نرم‌افزار جامع مدیریت تولید و پخش'
+admin.site.site_title = 'مدیریت تولید و پخش'
+admin.site.index_title = 'پنل مدیریت'
+
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
