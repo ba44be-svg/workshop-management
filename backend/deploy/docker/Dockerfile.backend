@@ -1,0 +1,78 @@
+# ============================================================
+# Dockerfile — Django Backend + Celery Workers
+# Image: workshop-backend:2.0
+#
+# مراحل build:
+#   1. builder: نصب وابستگی‌ها در image موقت
+#   2. final: image کوچک production با curl برای healthcheck
+#
+# استفاده:
+#   docker compose build backend
+#   docker compose up -d backend celery_worker celery_beat flower
+# ============================================================
+FROM python:3.12-slim AS builder
+
+# System dependencies برای build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    libpng-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# نصب وابستگی‌های Python در مرحله builder
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# ============================================================
+# Final stage — image سبک production
+# ============================================================
+FROM python:3.12-slim
+
+# Runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    libjpeg62-turbo \
+    libpng16-16 \
+    libfreetype6 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# کپی installed packages از builder
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# کپی کد اپلیکیشن
+COPY backend/ ./backend/
+COPY manage.py .
+COPY .env.example .env
+
+# تنظیمات محیطی
+ENV PYTHONPATH=/app/backend
+ENV DJANGO_SETTINGS_MODULE=config.settings.production
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# ساخت directoryهای لازم
+RUN mkdir -p /app/media /app/logs /app/staticfiles /app/secrets
+
+# Health check — هر ۳۰ ثانیه سرور را چک می‌کند
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=60s \
+    CMD curl -f http://localhost:8000/api/health/ || exit 1
+
+EXPOSE 8000
+
+# Default command — gunicorn با ۴ worker
+CMD ["gunicorn", "config.wsgi:application", \
+     "--bind", "0.0.0.0:8000", \
+     "--workers", "4", \
+     "--timeout", "120", \
+     "--access-logfile", "-", \
+     "--error-logfile", "-"]
