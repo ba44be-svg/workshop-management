@@ -13,10 +13,12 @@ APPS_DIR = BASE_DIR / 'backend' / 'apps'
 
 # ----- Environment Variables -----
 env = environ.Env()
-environ.Env.read_env(BASE_DIR / '.env')
+env_file = BASE_DIR / '.env'
+if env_file.exists():
+    environ.Env.read_env(env_file)
 
 # ----- Core Settings -----
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-!f+x@k7y$w+v=+i8*x!z7#4u0x9z=^d1(v+o$z4#1y7&6b^0*2')
 DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost'])
 SITE_URL = env('SITE_URL', default='http://localhost:8000')
